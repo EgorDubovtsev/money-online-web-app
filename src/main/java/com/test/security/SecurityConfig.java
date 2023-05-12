@@ -11,33 +11,24 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Controller
 @EnableWebSecurity
-public class SecurityConfig  extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserDetailsServiceMapper userDetailsService;
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserDetailsServiceMapper userDetailsService;
+
+    @Autowired
+    public SecurityConfig(UserDetailsServiceMapper userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/index").anonymous()
-                .antMatchers("/registration/**").permitAll()
-                .antMatchers("/src/css/**").permitAll()
-//                .antMatchers("/js/**")..anonymous()
-                .antMatchers("/img/**").permitAll()
-                .antMatchers("/fonts/**").permitAll()
-                .antMatchers("/icon/**").permitAll()
-                .antMatchers("/resources/**").permitAll()
-                .antMatchers("/components/**").permitAll()
-
-//                .anyRequest().authenticated()
-
+                .antMatchers("/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
 
@@ -51,14 +42,6 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout();
-    }
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/client/**")
-                .addResourceLocations("/client/")
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
     }
 
     @Override
