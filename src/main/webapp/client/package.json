@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pack:dev": ".\\node_modules\\.bin\\webpack --config webpack.config.js --mode development",
-    "pack:prod": "./node_modules/.bin/webpack --config webpack.config.js --mode production",
+    "pack:prod": ".\\node_modules\\.bin\\webpack --config webpack.config.js --mode production",
     "start:dev": "webpack-dev-server --mode development --env.author=vtb4045141 --env.password=sphere --env.user=vtb4045141 --env.USERNAME=vtb4045141 --env.PASSWORD=sphere --env.local --env.server=http://127.0.0.1:2990 --hot --inline",
     "start:dev-local": "webpack-dev-server --mode development --env.author=vtb40451 --env.password=sphere --env.local --env.server=http://eprumosl8142:2990 --hot --inline"
   },

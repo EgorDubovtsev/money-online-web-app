@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-
+src/main/resources/static/js
 node_modules
 .idea
 target

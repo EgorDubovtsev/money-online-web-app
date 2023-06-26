@@ -24,7 +24,7 @@ module.exports = env => {
     },
     output: {
       path: __dirname,
-      filename: '../../resources/static/[name].bundle.js',
+      filename: '../../resources/static/js/[name].bundle.js',
     },
     module: {
       rules: [
