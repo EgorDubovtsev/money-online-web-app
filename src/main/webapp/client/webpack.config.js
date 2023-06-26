@@ -18,11 +18,13 @@ module.exports = env => {
 
   const base = {
     entry: {
-      index: './js/index.js'
+      index: './src/transfer-page/index.js',
+      login: './src/login-page/index.js',
+      registration: './src/registration-page/index.js'
     },
     output: {
       path: __dirname,
-      filename: './built/[name].bundle.js',
+      filename: '../../resources/static/[name].bundle.js',
     },
     module: {
       rules: [

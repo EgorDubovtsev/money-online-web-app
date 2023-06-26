@@ -22,4 +22,13 @@ public class IndexController {
         return "login";
     }
 
+    @GetMapping("/registration")
+    public String registration(Model model, @RequestParam(required = false) String error) {
+        if (error != null) {
+            model.addAttribute("errorMessage", "invalid login or password!");
+        }
+
+        return "registration";
+    }
+
 }

@@ -5,29 +5,31 @@
   "main": "index.js",
   "scripts": {
     "pack:dev": ".\\node_modules\\.bin\\webpack --config webpack.config.js --mode development",
-    "pack:prod": ".\\node_modules\\.bin\\webpack --config webpack.config.js --mode production",
+    "pack:prod": "./node_modules/.bin/webpack --config webpack.config.js --mode production",
     "start:dev": "webpack-dev-server --mode development --env.author=vtb4045141 --env.password=sphere --env.user=vtb4045141 --env.USERNAME=vtb4045141 --env.PASSWORD=sphere --env.local --env.server=http://127.0.0.1:2990 --hot --inline",
     "start:dev-local": "webpack-dev-server --mode development --env.author=vtb40451 --env.password=sphere --env.local --env.server=http://eprumosl8142:2990 --hot --inline"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
-    "date-fns": "^2.22.1",
-    "loadash": "^1.0.0",
-    "lodash.groupby": "^4.6.0",
-    "numeral": "^2.0.6",
-    "performant-array-to-tree": "^1.8.1",
-    "prop-types": "^15.7.2",
-    "query-string": "^7.0.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-query": "^3.13.11",
-    "react-table": "^7.6.3",
-    "styled-components": "^3.4.10",
-    "redux-thunk": "^2.3.0"
-  },
-  "devDependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.13.2",
+    "@mui/x-date-pickers": "^6.9.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "chart.js": "^4.3.0",
+    "dayjs": "^1.11.8",
+    "formik": "^2.4.2",
+    "ng2-charts": "^4.1.1",
+    "primereact": "^9.5.0",
+    "quilljs": "^0.18.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "styled-components": "^5.3.10",
+    "web-vitals": "^2.1.4",
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
@@ -53,7 +55,6 @@
     "style-loader": "^1.0.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.11.0",
-    "react-hot-loader": "^4.13.0"
+    "webpack-dev-server": "^3.11.0"
   }
 }
