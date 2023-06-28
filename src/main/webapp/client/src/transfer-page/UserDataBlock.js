@@ -2,7 +2,6 @@ import React from "react";
 import styled from 'styled-components';
 import { Balance } from './Balance';
 import Button from '@mui/material/Button';
-// import image from './images.png';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,23 +9,24 @@ import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
-let backgroundColor= '#73B446'
-const hoverColor =  'red'
+let backgroundColor= '#348DE5'
+const hoverColor =  '#1976D2'
+const defaultImage = './img/images.png'
 
 const BalanceWrapper = styled.div`
   flex-wrap: wrap;
-  display:block;
+  display: flex;
   flex-direction: row;
-  height:140px;
   justify-content:  space-between;
-  width:500px;
-  background-color:${backgroundColor}; 
+  width: 320px;
+  heigth: 100px;
+  background-color: ${backgroundColor}; 
   border: 1px solid;
   border-radius: 4px;
-  padding-top:4px;
-  padding-bottom:4px;
-  padding-right:20px;
-  padding-left:20px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-right: 20px;
+  padding-left: 20px;
   &:hover {
     background-color:${hoverColor};
   }
@@ -34,23 +34,29 @@ const BalanceWrapper = styled.div`
 `
 
 const UserWrapper = styled.div`{
+  width: 80%;
   flex-wrap: nowrap;
-  width: 25%;
 
 }`
 const Name = styled.div`{
-  display:block;
+  font-size: 25px;
+  display: block;
   text-align: center;
-  width: 75%;
-  heigth: 100%;
+  width: 100%;
   text-align:center;
   margin-bottom: 5px;
 }`
 
 const ProfilePicture = styled.img`
   border-radius: 10px;
-  height: 80px;
-  width: 80px;
+  height: 40px;
+  width: 40px;
+`
+
+const ProfilePictureWrapper = styled.div`
+  width: 20%;
+  display: flex;
+  justify-conten: center;
 `
 const Transition = React.forwardRef(function Transition(props,ref) {
   console.log('class')
@@ -62,7 +68,7 @@ export const UserDataBlock = ({user, isPersonal}) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setIsOpen(true);
+    setIsOpen(!isPersonal && true);
   };
 
   const handleClose = () => {
@@ -75,12 +81,15 @@ export const UserDataBlock = ({user, isPersonal}) => {
     return(
       <>
         <BalanceWrapper onClick={handleClickOpen}>
+          <ProfilePictureWrapper>
+            <div>
+              <ProfilePicture  src={user.image == null ? defaultImage : user.image} alt='Profile'/>
+            </div>
+          </ProfilePictureWrapper>
+          <UserWrapper>
             <Name>{user.name}</Name>
-            <UserWrapper>
-                {/* <ProfilePicture  src={user.image==null ? image : user.image} alt='Profile'/> */}
-                {isPersonal && <Balance/>}
-                
-            </UserWrapper> 
+            {isPersonal && <Balance/>}                
+          </UserWrapper> 
         </BalanceWrapper>
          <Dialog
                   open={isOpen}

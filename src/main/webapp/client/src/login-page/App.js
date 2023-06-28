@@ -2,6 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import styled from "styled-components";
+import { baseUrl, registrationPath } from "../utils/consts";
 
 const Form = styled.form`
   width: 100%;
@@ -12,7 +13,6 @@ const NameWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-
 const MainWrapper = styled.div`
   width: 100%;
   padding-top: 30vh;
@@ -22,10 +22,10 @@ const MainWrapper = styled.div`
 
 const validateForm = (values) => {
   const errors = {};
-  if (!values.email) {
-    errors.email = 'Обязательно';
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-    errors.email = 'Некорректный email';
+  if (!values.username) {
+    errors.username = 'Обязательно';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.username)) {
+    errors.username = 'Некорректный email';
   }
 
   if (!values.password) {
@@ -34,46 +34,42 @@ const validateForm = (values) => {
   return errors;
 }
 
+const registrationHandler = () => {
+  window.location = baseUrl + registrationPath;
+}
+
 const App= () => {
     return(
       <MainWrapper>
         <Formik
-              initialValues={{ email: '', password: '' }}
+              initialValues={{ username: '', password: '' }}
               validate={validateForm}
-              onSubmit={(values, { setSubmitting }) => {
-                console.log('submitting')
-                //todo: отправлять рест
-              }}
             >
               {({
                 values,
                 errors,
                 touched,
                 handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
+                handleChange
               }) => (
-                <Form onSubmit={handleSubmit} >
+                <Form action="login/process" method="post">
                   <Box sx={{width:'30%'}}>
                     <Stack spacing={3}>
                       <NameWrapper>
                         <Typography variant="h5" gutterBottom>Банк "Online-Money"</Typography>
                       </NameWrapper>
                       <TextField
-                        id="outlined-required"
                         type="text"
-                        name="email"
-                        error={errors.email !== undefined && touched.email}
+                        name="username"
+                        error={errors.username !== undefined && touched.username}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.email}
-                        helperText={touched.email && errors.email}
-                        label="email"
+                        value={values.username}
+                        helperText={touched.username && errors.username}
+                        label="Электронная почта"
                       />
                       <TextField
-                        id="outlined-required"
-                        type="text"
+                        type="password"
                         name="password"
                         width="50px"
                         error={errors.password !== undefined && touched.password}
@@ -81,11 +77,11 @@ const App= () => {
                         onBlur={handleBlur}
                         value={values.password}
                         helperText={touched.password && errors.password}
-                        label="password"
+                        label="Пароль"
                       />
                       
-                      <Button disabled={isSubmitting} variant="contained" type="submit">Войти</Button>
-                      <Button>Зарегистрироваться</Button>
+                      <Button variant="contained" type="submit">Войти</Button>
+                      <Button onClick={registrationHandler}>Зарегистрироваться</Button>
                     </Stack>
                   </Box>
                 </Form> 

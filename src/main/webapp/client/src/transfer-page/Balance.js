@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-    pading: 10px;
     width: 100%;
     text-align: center;
 `
