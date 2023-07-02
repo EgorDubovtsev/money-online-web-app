@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from 'styled-components';
 import { Balance } from './Balance';
 import Button from '@mui/material/Button';
@@ -59,13 +59,21 @@ const ProfilePictureWrapper = styled.div`
   justify-conten: center;
 `
 const Transition = React.forwardRef(function Transition(props,ref) {
-  console.log('class')
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export const UserDataBlock = ({user, isPersonal}) => {
+  const [balance, setBalance] = React.useState(0);
+  const [currency, setCurrency] = React.useState('RUB');
 
   const [isOpen, setIsOpen] = React.useState(false);
+
+  useEffect(()=> {
+    if (isPersonal) {
+      setBalance(user.balance)
+      setCurrency(user.currency)
+    }
+  }, [])
 
   const handleClickOpen = () => {
     setIsOpen(!isPersonal && true);
@@ -83,12 +91,12 @@ export const UserDataBlock = ({user, isPersonal}) => {
         <BalanceWrapper onClick={handleClickOpen}>
           <ProfilePictureWrapper>
             <div>
-              <ProfilePicture  src={user.image == null ? defaultImage : user.image} alt='Profile'/>
+              <ProfilePicture  src={user.image == undefined ? defaultImage : user.image} alt='Profile'/>
             </div>
           </ProfilePictureWrapper>
           <UserWrapper>
             <Name>{user.name}</Name>
-            {isPersonal && <Balance/>}                
+            {isPersonal && <Balance balance={balance} currency={currency} />}                
           </UserWrapper> 
         </BalanceWrapper>
          <Dialog

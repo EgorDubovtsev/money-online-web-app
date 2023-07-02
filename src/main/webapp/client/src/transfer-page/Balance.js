@@ -6,9 +6,8 @@ const Wrapper = styled.div`
     text-align: center;
 `
 
-export const Balance = () =>{
-    const [balance, setBalance] = React.useState(0);
-    const [currency, setCurrency] = React.useState('RUB');
+export const Balance = ({balance, currency}) =>{
+
     return(
         <Wrapper>
             <span>{balance} {currency}</span>

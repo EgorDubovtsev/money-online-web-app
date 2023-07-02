@@ -2,7 +2,7 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { Formik } from "formik";
 import React from "react";
 import styled from "styled-components";
-import { baseUrl, registrationPath } from "../utils/consts";
+import { BASE_URL, REGISTRATION_PATH } from "../utils/consts";
 
 const Form = styled.form`
   width: 100%;
@@ -25,7 +25,7 @@ const validateForm = (values) => {
   if (!values.username) {
     errors.username = 'Обязательно';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.username)) {
-    errors.username = 'Некорректный email';
+    // errors.username = 'Некорректный email';
   }
 
   if (!values.password) {
@@ -35,10 +35,10 @@ const validateForm = (values) => {
 }
 
 const registrationHandler = () => {
-  window.location = baseUrl + registrationPath;
+  window.location = BASE_URL + REGISTRATION_PATH;
 }
 
-const App= () => {
+const App = () => {//todo: может отправляться без валидации
     return(
       <MainWrapper>
         <Formik

@@ -2,7 +2,7 @@ import { Box, Button, InputLabel, MenuItem, Select, Stack, TextField, Typography
 import { Formik } from "formik";
 import React from "react";
 import styled from "styled-components";
-import { baseUrl, loginPath } from "../utils/consts";
+import { BASE_URL, LOGIN_PATH } from "../utils/consts";
 import InputMask from 'react-input-mask';
 import { formatDate } from "../utils/utils";
 
@@ -25,7 +25,7 @@ const MainWrapper = styled.div`
 `
 
 const loginHandler = () => {
-  window.location = baseUrl + loginPath;
+  window.location = BASE_URL + LOGIN_PATH;
 }
 
 const validateForm = (values) => {

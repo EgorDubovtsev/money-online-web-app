@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.*;
 import java.util.ArrayList;
@@ -21,9 +22,6 @@ public class LocalUsersRepository implements UsersRepository {
 
     @Override
     public List<UserEntity> getAllUsers() {
-        if (users == null) {
-            users = getUsersFromFile();
-        }
         return users;
     }
 
@@ -52,6 +50,11 @@ public class LocalUsersRepository implements UsersRepository {
         this.userFilePath = userFilePath;
     }
 
+    @PostConstruct
+    private void init() {
+        users = getUsersFromFile();
+    }
+
     @PreDestroy
     private void saveAllUsers() {
         log.debug("Сохранение пользователей в файл");//todo:
@@ -59,7 +62,10 @@ public class LocalUsersRepository implements UsersRepository {
 
     @Override
     public UserEntity getUser(String username) {
-        return null;
+        return users.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

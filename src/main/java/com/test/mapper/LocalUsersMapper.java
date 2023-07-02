@@ -11,12 +11,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface LocalUsersMapper {
     @Mapping(target = "password", qualifiedByName = "encoder")
     @Mapping(target = "username", source = "username")
-    @Mapping(target = "authorities", expression = "java(getRoles())")
+    @Mapping(target = "authorities", expression = "java(getRoles(user.getRoles()))")
     ApplicationUser userEntityToApplicationUser(UserEntity user);
 
     @Named("encoder")
@@ -24,11 +25,15 @@ public interface LocalUsersMapper {
         return new BCryptPasswordEncoder().encode(password);
     }
 
-    default HashSet<GrantedAuthority> getRoles() {
-        HashSet<GrantedAuthority> defaultAuthority = new HashSet<>();
-        defaultAuthority.add(new SimpleGrantedAuthority("USER"));
-        defaultAuthority.add(new SimpleGrantedAuthority("ADMIN"));
-        return defaultAuthority;
+    default HashSet<GrantedAuthority> getRoles(List<String> roles) {
+        if (roles == null) {
+            return new HashSet<>();
+        }
+        HashSet<GrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(role ->
+                authorities.add(new SimpleGrantedAuthority(role))
+        );
+        return authorities;
     }
 
 //    @Mapping(target = "role", source = "roles")
