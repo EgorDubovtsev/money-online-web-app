@@ -26,4 +26,8 @@ public class UsersService {
     public UserEntity getUserInfoByUsername(String username) {
         return usersRepository.getUser(username);
     }
+
+    public void createUser(UserEntity user){
+        usersRepository.createUser(user);
+    }
 }

@@ -1,8 +1,9 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, Stack, TextField, Typography } from "@mui/material";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { BASE_URL, REGISTRATION_PATH } from "../utils/consts";
+import { BASE_URL, REGISTRATION_PATH, SUCCESS_CODE, TRANSFER_PAGE_PATH } from "../utils/consts";
+import { login } from "../utils/utils";
 
 const Form = styled.form`
   width: 100%;
@@ -38,21 +39,54 @@ const registrationHandler = () => {
   window.location = BASE_URL + REGISTRATION_PATH;
 }
 
-const App = () => {//todo: может отправляться без валидации
+const successAuthenicationHandler = () => {
+  window.location = BASE_URL + TRANSFER_PAGE_PATH
+}
+
+const createLoginFormdata = (values) => {
+  const form = new FormData()
+  form.append("username", values.username)
+  form.append("password", values.password)
+
+  return form
+} 
+
+
+const App = () => {
+  const [submitError, setSubmitError] = useState()
+
+  const submitHanler = (values, { setSubmitting }) => {
+    setSubmitting(true)
+
+    const formData = createLoginFormdata(values)
+    login(formData).catch(res => {
+      setSubmitError(res.response.data)
+
+    }).then(res =>{
+      setSubmitting(false)
+
+      if (res.status === SUCCESS_CODE) {
+        successAuthenicationHandler()
+      }
+
+  })
+}
     return(
       <MainWrapper>
         <Formik
               initialValues={{ username: '', password: '' }}
               validate={validateForm}
+              onSubmit={submitHanler}
             >
               {({
                 values,
                 errors,
                 touched,
                 handleBlur,
+                handleSubmit,
                 handleChange
               }) => (
-                <Form action="login/process" method="post">
+                <Form onSubmit={handleSubmit} action="login/process" method="post">
                   <Box sx={{width:'30%'}}>
                     <Stack spacing={3}>
                       <NameWrapper>
@@ -79,8 +113,8 @@ const App = () => {//todo: может отправляться без валид
                         helperText={touched.password && errors.password}
                         label="Пароль"
                       />
-                      
                       <Button variant="contained" type="submit">Войти</Button>
+                      <FormHelperText filled error>{submitError}</FormHelperText>
                       <Button onClick={registrationHandler}>Зарегистрироваться</Button>
                     </Stack>
                   </Box>

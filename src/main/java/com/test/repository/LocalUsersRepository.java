@@ -56,8 +56,23 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     @PreDestroy
-    private void saveAllUsers() {
-        log.debug("Сохранение пользователей в файл");//todo:
+    private void saveAllUsers() throws IOException {
+        log.debug("Сохранение пользователей в файл");
+        File userFile = new File(userFilePath);
+
+        if (!userFile.exists()) {
+            userFile.createNewFile();
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(userFile))) {
+            for (UserEntity user : users) {
+                bw.write(MAPPER.toJson(user));
+                bw.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

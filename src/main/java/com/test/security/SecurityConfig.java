@@ -1,5 +1,6 @@
 package com.test.security;
 
+import com.test.security.handler.DefaultFailureHandler;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final DefaultFailureHandler failureHandler = new DefaultFailureHandler();
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -24,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .loginProcessingUrl("/login/process")
                 .defaultSuccessUrl("/")
-                .failureUrl("/login?error")
+                .failureHandler(failureHandler)
 
                 .and()
                 .logout();
