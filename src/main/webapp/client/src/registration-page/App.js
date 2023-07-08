@@ -2,9 +2,9 @@ import { Box, Button, InputLabel, MenuItem, Select, Stack, TextField, Typography
 import { Formik } from "formik";
 import React from "react";
 import styled from "styled-components";
-import { BASE_URL, LOGIN_PATH } from "../utils/consts";
+import { BASE_URL, LOGIN_PATH, SUCCESS_CODE } from "../utils/consts";
 import InputMask from 'react-input-mask';
-import { formatDate } from "../utils/utils";
+import { formatDate, isDateValid, registration } from "../utils/utils";
 
 const ADULT_AGE = 18;
 const Form = styled.form`
@@ -29,8 +29,8 @@ const loginHandler = () => {
 }
 
 const validateForm = (values) => {
-  console.log(values)
   const errors = {};
+
   if (!values.username) {
     errors.username = 'Обязательно';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.username)) {
@@ -53,6 +53,14 @@ const validateForm = (values) => {
     errors.birthdate = 'Обязательно';
   }
 
+  if (!isDateValid(values.birthdate)) {
+    errors.birthdate = 'Некорректно указана дата';
+  }
+    
+  if (!values.name) {
+    errors.name = 'Обязательно';
+  }
+
   const minAdultBirthday = new Date()
   minAdultBirthday.setFullYear(new Date().getFullYear() - ADULT_AGE)
   if (values.birthdate && formatDate(values.birthdate) > minAdultBirthday) {
@@ -62,16 +70,43 @@ const validateForm = (values) => {
   return errors;
 }
 
+const createRegistrationFormdata = (values) => {
+  const form = {
+    username: values.username,
+    name: values.name,
+    password: values.password,
+    currency: values.currency,
+    birthdate: new Date(values.birthdate)
+  }
+
+  return form
+} 
+
 const App= () => {
+
+  const submitHandler = (values, { setSubmitting }) => {
+    setSubmitting(true)
+    const form = createRegistrationFormdata(values)
+
+    registration(form).catch(res => {
+      setSubmitError(res.response.data)
+
+    }).then(res =>{
+      setSubmitting(false)
+
+      if (res.status === SUCCESS_CODE) {
+        loginHandler()
+      }
+
+  })
+
+  }
     return(
       <MainWrapper>
         <Formik
-              initialValues={{ username: '', password: '', passwordSec: '', birthdate: '', currency: 'None' }}
+              initialValues={{ username: '', name: '', password: '', passwordSec: '', birthdate: '', currency: 'None' }}
               validate={validateForm}
-              onSubmit={(values, { setSubmitting }) => {
-                console.log('submitting')
-                //todo: отправлять рест
-              }}
+              onSubmit={submitHandler}
             >
               {({
                 values,
@@ -81,7 +116,7 @@ const App= () => {
                 handleSubmit,
                 handleChange,
               }) => (
-                <Form onSubmit={handleSubmit} action="registration/process" method="post">
+                <Form onSubmit={handleSubmit}>
                   <Box sx={{width:'30%'}}>
                     <Stack spacing={3}>
                       <NameWrapper>
@@ -96,6 +131,16 @@ const App= () => {
                         value={values.username}
                         helperText={touched.username && errors.username}
                         label="Email"
+                      />
+                      <TextField  
+                        type="text"
+                        name="name"
+                        error={errors.name !== undefined && touched.name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
+                        helperText={touched.name && errors.name}
+                        label="Имя"
                       />
                       <TextField
                         type="password"

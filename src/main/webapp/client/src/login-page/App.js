@@ -86,7 +86,7 @@ const App = () => {
                 handleSubmit,
                 handleChange
               }) => (
-                <Form onSubmit={handleSubmit} action="login/process" method="post">
+                <Form onSubmit={handleSubmit}>
                   <Box sx={{width:'30%'}}>
                     <Stack spacing={3}>
                       <NameWrapper>

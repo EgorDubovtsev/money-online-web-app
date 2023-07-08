@@ -1,10 +1,18 @@
 import axios from 'axios'
-import { BASE_URL, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH } from './consts'
+import { BASE_URL, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, REGISTRATION_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH } from './consts'
 
 export const formatDate = (date) => {
     const dateParts = date.split("/")
-    console.log(dateParts)
     return new Date(dateParts[2], dateParts[1] - 1, dateParts[0])
+}
+
+export const isDateValid = (date) => {
+    const dateParts = date.split("/")
+    return dateParts[0] < 32
+        && dateParts[0] > 0
+        && dateParts[1] < 13
+        && dateParts[1] > 0 
+        && dateParts[2] > 1950 
 }
 
 export async function getUsersAvailableForTransfer() {
@@ -20,5 +28,12 @@ export async function getCurrentUserFullInfo() {
 export function login(form) {
     const url = BASE_URL + LOGIN_PROCESS_PATH
     return axios.post(url, form)
+
+}
+
+export function registration(values) {
+    const url = BASE_URL + REGISTRATION_PROCESS_PATH
+
+    return axios.post(url, values)
 
 }

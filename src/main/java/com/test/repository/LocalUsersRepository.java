@@ -9,13 +9,17 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.LongStream;
 
 @Slf4j
 @Component
 public class LocalUsersRepository implements UsersRepository {
     private static final Gson MAPPER = new Gson();
+    private static final Long DEFAULT_ID = 1L;
     private static List<UserEntity> users;
     private String userFilePath;
 
@@ -28,6 +32,7 @@ public class LocalUsersRepository implements UsersRepository {
     private List<UserEntity> getUsersFromFile() {
         log.debug("Получение пользователей из файла.");
         File usersFile = new File(userFilePath);
+
         if (!usersFile.exists()) {
             log.error("Некорректный путь к файлу с пользователями. Путь = {}", userFilePath);
             throw new IllegalArgumentException("Некорректный путь к файлу с пользователями.");
@@ -85,11 +90,21 @@ public class LocalUsersRepository implements UsersRepository {
 
     @Override
     public void createUser(UserEntity user) {
+        user.setId(generateId());
+        user.setBalance(new BigDecimal(0));
+        user.setRoles(Collections.singletonList("USER"));
         LocalUsersRepository.users.add(user);
     }
 
     @Override
     public void saveUserChanges(UserEntity user) {
 
+    }
+
+    private Long generateId() {
+       return getAllUsers().stream()
+               .flatMapToLong(user-> LongStream.of(user.getId()))
+               .max()
+               .orElse(DEFAULT_ID);
     }
 }
