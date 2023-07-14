@@ -1,2 +1,0 @@
-{"id":1,"name":"Игорь","password":"test","username":"test","balance":100,"currency":"RUB","roles":["USER","ADMIN"],accountNonExpired":true,"accountNonLocked":true,"credentialsNonExpired":true,"enabled":true}
-{"id":2,"name":"Леша запчасти","password":"test1","username":"test1","balance":100,"currency":"RUB","roles":["USER","ADMIN"],"accountNonExpired":true,"accountNonLocked":true,"credentialsNonExpired":true,"enabled":true}

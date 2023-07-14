@@ -1,7 +1,0 @@
-spring:
-  profiles:
-    active: local
-
-user:
-  file:
-    path: src/main/resources/users/user-data.text
