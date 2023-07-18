@@ -1,6 +1,15 @@
 spring:
   profiles:
-    active: local
+    active: prod
+  h2:
+    console.enabled: true
+  datasource:
+    url: jdbc:h2:mem:monline
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 
 user:
   file:

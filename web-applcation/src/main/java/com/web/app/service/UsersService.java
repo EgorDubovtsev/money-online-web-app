@@ -11,14 +11,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
+
+import static com.web.app.consts.Const.ACCOUNT_NUMBER_SYMBOL_COUNT;
 
 @Service
 @Slf4j
 @AllArgsConstructor(onConstructor = @_(@Autowired))
 public class UsersService {
     private UsersRepository usersRepository;
-    
+
     public List<UserEntity> getUsersAvailableForTransfer(String username) {
         //todo: TBD
         return usersRepository.getAllUsers()
@@ -31,12 +34,14 @@ public class UsersService {
         return usersRepository.getUser(username);
     }
 
-    public Errors createUser(UserEntity user){
+    public Errors createUser(UserEntity user) {
         Errors errors = new Errors();
 
-        if (getUserInfoByUsername(user.getUsername())!=null) {
+        if (getUserInfoByUsername(user.getUsername()) != null) {
             return errors.addError("Пользователь с таким email уже зарегистрирован.");
         }
+
+        user.setAccountNumber(generateAccountNumber());
 
         try {
             usersRepository.createUser(user);
@@ -47,5 +52,14 @@ public class UsersService {
         }
 
         return errors;
+    }
+
+    private String generateAccountNumber() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < ACCOUNT_NUMBER_SYMBOL_COUNT; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
     }
 }

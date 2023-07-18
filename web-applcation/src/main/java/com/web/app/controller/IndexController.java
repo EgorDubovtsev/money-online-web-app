@@ -1,11 +1,11 @@
 package com.web.app.controller;
 
 
-
 import com.web.app.entity.UserEntity;
 import com.web.app.service.UsersService;
 import com.web.app.service.entity.Errors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,20 +28,12 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public String login(Model model, @RequestParam(required = false) String error) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "invalid login or password!");
-        }
-
+    public String login() {
         return "login";
     }
 
     @GetMapping("/registration")
-    public String registration(Model model, @RequestParam(required = false) String error) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "invalid login or password!");
-        }
-
+    public String registration() {
         return "registration";
     }
 

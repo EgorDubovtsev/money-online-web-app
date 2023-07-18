@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.web.app.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import java.util.stream.LongStream;
 
 @Slf4j
 @Component
+@Profile("local")
 public class LocalUsersRepository implements UsersRepository {
     private static final Gson MAPPER = new Gson();
     private static final Long DEFAULT_ID = 1L;
@@ -60,7 +61,7 @@ public class LocalUsersRepository implements UsersRepository {
         users = getUsersFromFile();
     }
 
-    @PreDestroy
+//    @PreDestroy
     private void saveAllUsers() throws IOException {
         log.debug("Сохранение пользователей в файл");
         File userFile = new File(userFilePath);

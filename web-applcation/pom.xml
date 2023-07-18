@@ -41,7 +41,6 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -55,6 +54,10 @@
             <groupId>org.example</groupId>
             <artifactId>commons</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -95,7 +98,7 @@
                                 <argument>install</argument>
                                 <argument>&#45;&#45;no-shrinkwrap</argument>
                             </arguments>
-                            <skip>false</skip>
+                            <skip>true</skip>
                         </configuration>
                         <goals>
                             <goal>exec</goal>
