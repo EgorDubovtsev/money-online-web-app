@@ -3,11 +3,13 @@ package com.web.app.service;
 
 import com.web.app.entity.UserEntity;
 import com.web.app.repository.UsersRepository;
+import com.web.app.service.dto.TransferClientDto;
 import com.web.app.service.entity.Errors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +23,7 @@ import static com.web.app.consts.Const.ACCOUNT_NUMBER_SYMBOL_COUNT;
 @AllArgsConstructor(onConstructor = @_(@Autowired))
 public class UsersService {
     private UsersRepository usersRepository;
+    private UserRestService userRestService;
 
     public List<UserEntity> getUsersAvailableForTransfer(String username) {
         //todo: TBD
@@ -31,7 +34,18 @@ public class UsersService {
     }
 
     public UserEntity getUserInfoByUsername(String username) {
-        return usersRepository.getUser(username);
+        UserEntity user = usersRepository.getUser(username);
+        if (user == null) {
+            return null;
+        }
+
+        TransferClientDto clientData = userRestService.getClientData(user.getId());
+
+        user.setBalance(clientData.getBalance());
+        user.setCurrency(clientData.getCurrency());
+        user.setAccountNumber(clientData.getAccount());
+
+        return user;
     }
 
     public Errors createUser(UserEntity user) {
@@ -45,6 +59,8 @@ public class UsersService {
 
         try {
             usersRepository.createUser(user);
+            userRestService.registerUserInTransactionService(user);
+
         } catch (Exception e) {
             log.warn("Во время создания пользователя просизошла ошибка. User: {}", user);
             log.warn("{}", e);
@@ -61,5 +77,9 @@ public class UsersService {
             stringBuilder.append(random.nextInt(10));
         }
         return stringBuilder.toString();
+    }
+
+    public UserEntity getUserById(Long userId) {
+        return usersRepository.findById(userId);
     }
 }

@@ -14,4 +14,6 @@ public interface UsersRepository {
     void createUser(UserEntity user);
 
     void saveUserChanges(UserEntity user);
+
+    UserEntity findById(Long id);
 }

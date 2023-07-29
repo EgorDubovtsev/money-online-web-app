@@ -61,7 +61,6 @@ public class LocalUsersRepository implements UsersRepository {
         users = getUsersFromFile();
     }
 
-//    @PreDestroy
     private void saveAllUsers() throws IOException {
         log.debug("Сохранение пользователей в файл");
         File userFile = new File(userFilePath);
@@ -103,9 +102,17 @@ public class LocalUsersRepository implements UsersRepository {
     }
 
     private Long generateId() {
-       return getAllUsers().stream()
-               .flatMapToLong(user-> LongStream.of(user.getId()))
-               .max()
-               .orElse(DEFAULT_ID);
+        return getAllUsers().stream()
+                .flatMapToLong(user -> LongStream.of(user.getId()))
+                .max()
+                .orElse(DEFAULT_ID);
+    }
+
+    @Override
+    public UserEntity findById(Long id) {
+        return getAllUsers().stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }

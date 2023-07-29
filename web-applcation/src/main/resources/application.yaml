@@ -17,3 +17,12 @@ user:
 
 server:
   port: 8080
+
+services:
+  transactionService:
+    url: http://localhost:8081
+    createUserPath: /ts/create
+    getClientDataPath: /ts/{clientId}/data
+    auth:
+      username: webservice
+      password: wbsvc123

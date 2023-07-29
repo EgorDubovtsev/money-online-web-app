@@ -1,5 +1,6 @@
 package com.transfer.online.controller;
 
+import com.transfer.online.dto.TransactionDto;
 import com.transfer.online.entity.Transaction;
 import com.transfer.online.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.transfer.online.cost.Const.INVALID_TRANSACTION_ERROR;
+import static com.transfer.online.cosnts.Const.INVALID_TRANSACTION_ERROR;
 
 @Slf4j
 @Controller
@@ -23,13 +24,13 @@ public class TransferController {
 
     @PostMapping
     @RequestMapping("/transfer")
-    public ResponseEntity<String> transfer(@RequestBody Transaction transaction) {
-        log.debug("POST: /ts/transfer from: {}, to: {}, amount: {} {}", transaction.getAccountSource(), transaction.getAccountDestination(), transaction.getAmount(), transaction.getCurrency());
+    public ResponseEntity<String> transfer(@RequestBody TransactionDto transactionDto) {
+        log.debug("POST: /ts/transfer from: {}, to: {}, amount: {} {}", transactionDto.getAccountSource(), transactionDto.getAccountDestination(), transactionDto.getAmount(), transactionDto.getCurrency());
 
-        if (transactionService.isTransactionValid(transaction)) {
-            log.debug("Транзакция доступна к выполнению. from={} to={}", transaction.getAccountSource(), transaction.getAccountDestination());
-            transactionService.executeTransaction(transaction);
-            return ResponseEntity.ok(HttpStatus.OK.toString()); //todo: return transaction code
+        if (transactionService.isTransactionValid(transactionDto)) {
+            log.debug("Транзакция доступна к выполнению. from={} to={}", transactionDto.getAccountSource(), transactionDto.getAccountDestination());
+            Long transactionCode = transactionService.executeTransaction(transactionDto);
+            return ResponseEntity.ok(transactionCode.toString());
 
         } else {
             return new ResponseEntity<>(INVALID_TRANSACTION_ERROR ,HttpStatus.BAD_REQUEST);

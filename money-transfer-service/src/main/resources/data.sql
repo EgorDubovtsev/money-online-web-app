@@ -1,0 +1,1 @@
+INSERT INTO service_users(id, username, password, role) values(1, 'webservice', '$2a$10$wOl4WM.VO9TkMXxESsV36uzFCLZfQn4ziWVY9dXte3j9GTjXky6Qy', 'USER');

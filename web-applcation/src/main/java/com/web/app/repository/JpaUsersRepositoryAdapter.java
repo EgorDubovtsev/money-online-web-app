@@ -34,4 +34,9 @@ public class JpaUsersRepositoryAdapter implements UsersRepository {
     public void saveUserChanges(UserEntity user) {
         usersRepository.save(user);
     }
+
+    @Override
+    public UserEntity findById(Long id) {
+        return usersRepository.findById(id).orElse(null);
+    }
 }
