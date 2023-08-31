@@ -8,6 +8,9 @@ import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import { createTransfer } from "../utils/utils";
+import { Alert } from "@mui/material";
+import { SUCCESS_CODE } from "../utils/consts";
 
 let backgroundColor= '#348DE5'
 const hoverColor =  '#1976D2'
@@ -62,28 +65,55 @@ const Transition = React.forwardRef(function Transition(props,ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const UserDataBlock = ({user, isPersonal}) => {
+export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserBalance}) => {
   const [balance, setBalance] = React.useState(0);
   const [currency, setCurrency] = React.useState('RUB');
-
+  const [transferAmount, setTransferAmount] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [transferError, setTransferError] = React.useState(null);
 
   useEffect(()=> {
     if (isPersonal) {
-      setBalance(user.balance)
-      setCurrency(user.currency)
+      setBalance(user.balance);
+      setCurrency(user.currency);
     }
   }, [])
 
+  useEffect(()=> {
+    setBalance(user.balance);
+  }, [user])
+
   const handleClickOpen = () => {
+    setTransferError(null)
     setIsOpen(!isPersonal && true);
   };
 
-  const handleClose = () => {
-    setIsOpen(false)
+  const createTransition = (accountLoginTo, amount) => {
+    createTransfer(currentUser.username, accountLoginTo, amount).catch(res=>{
+        setTransferError(res.response.data);
+    }).then(response => {
+      if (response.status === SUCCESS_CODE) {
+        setIsOpen(false);
+        updateCurrentUserBalance();
+      }
+    })
+    
+  } 
+
+  const amountChangeHandler = (e) => {
+    setTransferAmount(e.target.value.replace(/\D/,''));
+  } 
+
+  const handleTransfer = () => {
+    createTransition(user.username, transferAmount);
   };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
   if (!user) {
-    return <div>{'Ошибка'}</div>
+    return <div>{'Ошибка'}</div>;
   }
 
     return(
@@ -103,25 +133,28 @@ export const UserDataBlock = ({user, isPersonal}) => {
                   open={isOpen}
                   TransitionComponent={Transition}
                   keepMounted
-                   onClose={handleClose}
+                  onClose={handleClose}
                   closeAfterTransition
                   aria-describedby="alert-dialog-slide-description"
                 >
                   <DialogTitle>{"Укажите сумму перевода"}</DialogTitle>
+                   {transferError !=null && <Alert severity="error">{transferError}</Alert>}
                   <DialogContent>
                     <TextField
                       autoFocus
+                      value={transferAmount}
+                      onChange={amountChangeHandler}
                       margin="dense"
-                      id="name"
+                      id="amount"
                       label="Сумма в рублях"
-                      type="TEXT"
+                      type="text"
                       fullWidth
                       variant="standard"
                     />
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={()=>handleClose()}>Отмена</Button>
-                    <Button onClick={()=>handleClose()}>Перевести</Button>
+                    <Button onClick={()=>handleTransfer()} disabled={transferError !== null}>Перевести</Button>
                   </DialogActions>
                 </Dialog>
     </>

@@ -3,14 +3,15 @@ import Typography from '@mui/material/Typography';
 import { UserDataBlock } from './UserDataBlock';
 import styled from "styled-components";
 import CircularProgress from '@mui/material/CircularProgress';
-import { getCurrentUserFullInfo, getUsersAvailableForTransfer } from "../utils/utils";
+import { getCurrentUserFullInfo, getUsersAvailableForTransfer, logout } from "../utils/utils";
+import { Button } from "@mui/material";
 
 const MainWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   backgroundColor: #ECFBE0;
-  height: 100vh;
+  height: 70vh;
 `
 const Column = styled.div`
   display: flex;
@@ -23,6 +24,11 @@ const MainUser = styled.div`
   display: flex;
   width: 100vh;
   height: 80px;
+  justify-content: center;
+`
+const ButtonWrapper = styled.div`
+  display: flex;
+  width: 100vh;
   justify-content: center;
 `
 
@@ -52,17 +58,27 @@ const [currentUser, setCurrentUser] = useState()
     return <CircularProgress />
   }
 
-  return (
-    <MainWrapper>
-      <MainUser>
-        {currentUser != undefined && <UserDataBlock user={currentUser} isPersonal={true}/>}
-      </MainUser>
-      <Column>
-       <Typography variant="h5" component="div">Выберте пользователя для перевода</Typography>
+  const logoutHandler = () => {
+    logout();
+  }
 
-        {usersForTransfer.length === 0 ? <CircularProgress /> : usersForTransfer.map(user => <UserDataBlock user={user} key={user.id} isPersonal={false}/>)}
-      </Column>
-     </MainWrapper>
+  return (
+    <>
+      <MainWrapper>
+        <MainUser>
+          {currentUser != undefined && <UserDataBlock user={currentUser} isPersonal={true} updateCurrentUserBalance={setCurrentUserInfo}/>}
+        </MainUser>
+        <Column>
+        <Typography variant="h5" component="div">Выберте пользователя для перевода</Typography>
+
+          {usersForTransfer.length === 0 ? <CircularProgress /> : usersForTransfer.map(user => <UserDataBlock user={user} key={user.id} isPersonal={false} currentUser={currentUser} updateCurrentUserBalance={setCurrentUserInfo}/>)}
+        </Column>
+       </MainWrapper>
+       <ButtonWrapper>
+         <Button variant="outlined" onClick={logoutHandler}>Выход</Button>
+       </ButtonWrapper>
+    </>
+
   );
 }
 

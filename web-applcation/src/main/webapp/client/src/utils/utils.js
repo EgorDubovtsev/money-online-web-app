@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { BASE_URL, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, REGISTRATION_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH } from './consts'
+import { BASE_URL, CREATE_TRANSFER_PATH, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, REGISTRATION_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH, LOGOUT_PATH } from './consts'
 
 export const formatDate = (date) => {
     const dateParts = date.split("/")
@@ -36,4 +36,19 @@ export function registration(values) {
 
     return axios.post(url, values)
 
+}
+
+export function createTransfer(userFrom, userTo, amount) {
+    const url = BASE_URL + CREATE_TRANSFER_PATH;
+    const data = {
+        userLoginFrom: userFrom,
+        userLoginTo: userTo,
+        amount: amount
+    }
+    return axios.post(url, data)
+}
+
+export function logout() {
+    const url = BASE_URL + LOGOUT_PATH;
+    window.location.replace(url);
 }

@@ -40,12 +40,19 @@ public class UsersService {
         }
 
         TransferClientDto clientData = userRestService.getClientData(user.getId());
+        if (clientData == null) {
+            clientData = tryToGetClientDataFromLocal(user);
+        }
 
         user.setBalance(clientData.getBalance());
         user.setCurrency(clientData.getCurrency());
         user.setAccountNumber(clientData.getAccount());
 
         return user;
+    }
+
+    private TransferClientDto tryToGetClientDataFromLocal(UserEntity user) {
+        return new TransferClientDto(user.getId(), user.getAccountNumber(), user.getBalance(), user.getCurrency());
     }
 
     public Errors createUser(UserEntity user) {

@@ -2,6 +2,8 @@ export const BASE_URL = window.location.origin
 export const SUCCESS_CODE = 200
 
 export const TRANSFER_PAGE_PATH = '/'
+export const CREATE_TRANSFER_PATH = '/transfer'
+export const LOGOUT_PATH = '/logout'
 export const LOGIN_PATH = '/login'
 export const LOGIN_PROCESS_PATH = '/login/process'
 export const REGISTRATION_PATH = '/registration'

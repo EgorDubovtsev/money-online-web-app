@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 @Profile("local")
 @Service
 @Slf4j
-@RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class LocalUserRestService implements UserRestService {
-    private final UsersService usersService;
 
     @Override
     public void registerUserInTransactionService(UserEntity userEntity) {
@@ -23,7 +21,6 @@ public class LocalUserRestService implements UserRestService {
     @Override
     public TransferClientDto getClientData(Long clientId) {
         log.info("В локальном режиме запрос не отправляется в сервис переводов.");
-        UserEntity user = usersService.getUserById(clientId);
-        return user == null ? null : new TransferClientDto(user.getId(), user.getAccountNumber(), user.getBalance(), user.getCurrency());
+        return null;
     }
 }

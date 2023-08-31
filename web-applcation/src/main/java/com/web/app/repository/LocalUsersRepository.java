@@ -9,11 +9,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.LongStream;
+
+import static com.web.app.consts.Const.INITIAL_BALANCE;
 
 @Slf4j
 @Component
@@ -91,7 +92,7 @@ public class LocalUsersRepository implements UsersRepository {
     @Override
     public void createUser(UserEntity user) {
         user.setId(generateId());
-        user.setBalance(new BigDecimal(0));
+        user.setBalance(INITIAL_BALANCE);
         user.setRoles(Collections.singletonList("USER"));
         LocalUsersRepository.users.add(user);
     }

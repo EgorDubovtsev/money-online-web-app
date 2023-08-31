@@ -24,6 +24,7 @@ public class LocalMoneyTransferService implements TransactionService {
 
         boolean isTransactionValid = userFrom.getCurrency().equals(userTo.getCurrency());
         BigDecimal amount = new BigDecimal(transactionDto.getAmount());
+        isTransactionValid = isTransactionValid && amount.compareTo(BigDecimal.ZERO) > 0;
         userFrom.lock();
 
         isTransactionValid = isTransactionValid && userFrom.getBalance().compareTo(amount) >= 0;
