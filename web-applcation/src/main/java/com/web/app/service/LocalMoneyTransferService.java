@@ -34,7 +34,6 @@ public class LocalMoneyTransferService implements TransactionService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean executeTransaction(TransactionDto transactionDto) {
         UserEntity userFrom = usersService.getUserInfoByUsername(transactionDto.getUserLoginFrom());
         UserEntity userTo = usersService.getUserInfoByUsername(transactionDto.getUserLoginTo());

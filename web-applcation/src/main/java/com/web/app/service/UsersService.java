@@ -9,14 +9,19 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResourceAccessException;
 
+import javax.annotation.PostConstruct;
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.web.app.consts.Const.ACCOUNT_NUMBER_SYMBOL_COUNT;
+import static com.web.app.consts.Const.INITIAL_BALANCE;
 
 @Service
 @Slf4j
@@ -24,6 +29,14 @@ import static com.web.app.consts.Const.ACCOUNT_NUMBER_SYMBOL_COUNT;
 public class UsersService {
     private UsersRepository usersRepository;
     private UserRestService userRestService;
+
+    @PostConstruct
+    private void createDefaultUser() {
+        usersRepository.getAllUsers()
+                .forEach(userEntity ->
+                        userRestService.registerUserInTransactionService(userEntity)
+                );
+    }
 
     public List<UserEntity> getUsersAvailableForTransfer(String username) {
         //todo: TBD
@@ -55,25 +68,29 @@ public class UsersService {
         return new TransferClientDto(user.getId(), user.getAccountNumber(), user.getBalance(), user.getCurrency());
     }
 
-    public Errors createUser(UserEntity user) {
-        Errors errors = new Errors();
-
-        if (getUserInfoByUsername(user.getUsername()) != null) {
-            return errors.addError("Пользователь с таким email уже зарегистрирован.");
-        }
-
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = RuntimeException.class)
+    public void createUser(UserEntity user) {
         user.setAccountNumber(generateAccountNumber());
 
         try {
+            user.setBalance(INITIAL_BALANCE);
             usersRepository.createUser(user);
             userRestService.registerUserInTransactionService(user);
 
         } catch (Exception e) {
             log.warn("Во время создания пользователя просизошла ошибка. User: {}", user);
             log.warn("{}", e);
-            errors = errors.undefinedError();
+
+            throw new RuntimeException("Во время создания пользователя просизошла ошибка");
         }
 
+    }
+
+    public Errors validateUserCreate(UserEntity user) {
+        Errors errors = new Errors();
+        if (getUserInfoByUsername(user.getUsername()) != null) {
+            return errors.addError("Пользователь с таким email уже зарегистрирован.");
+        }
         return errors;
     }
 

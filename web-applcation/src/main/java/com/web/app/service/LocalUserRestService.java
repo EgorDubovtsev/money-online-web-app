@@ -2,9 +2,7 @@ package com.web.app.service;
 
 import com.web.app.entity.UserEntity;
 import com.web.app.service.dto.TransferClientDto;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 

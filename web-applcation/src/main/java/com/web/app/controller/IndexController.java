@@ -5,17 +5,14 @@ import com.web.app.entity.UserEntity;
 import com.web.app.service.UsersService;
 import com.web.app.service.entity.Errors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 @Controller
@@ -39,8 +36,16 @@ public class IndexController {
 
     @PostMapping(value = "/registration/process", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> registrationProcess(@RequestBody UserEntity user) {
-        Errors errors = usersService.createUser(user);
-        if (!errors.getErrors().isEmpty()){
+        Errors errors = usersService.validateUserCreate(user);
+
+        try {
+            usersService.createUser(user);
+
+        } catch (Exception e) {
+            errors.undefinedError();
+        }
+
+        if (!errors.getErrors().isEmpty()) {
             return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
         }
 

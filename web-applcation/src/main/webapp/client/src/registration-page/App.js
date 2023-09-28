@@ -1,6 +1,6 @@
-import { Box, Button, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, FormHelperText, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BASE_URL, LOGIN_PATH, SUCCESS_CODE } from "../utils/consts";
 import InputMask from 'react-input-mask';
@@ -83,6 +83,7 @@ const createRegistrationFormdata = (values) => {
 } 
 
 const App= () => {
+  const [submitError, setSubmitError] = useState();
 
   const submitHandler = (values, { setSubmitting }) => {
     setSubmitting(true)
@@ -94,7 +95,7 @@ const App= () => {
     }).then(res =>{
       setSubmitting(false)
 
-      if (res.status === SUCCESS_CODE) {
+      if (res && res.status === SUCCESS_CODE) {
         loginHandler()
       }
 
@@ -194,6 +195,7 @@ const App= () => {
                       </Select>
                       
                       <Button variant="contained" type="submit">Зарегистрироваться</Button>
+                      <FormHelperText filled error>{submitError}</FormHelperText>
                       <Button onClick={loginHandler}>Уже есть аккаунт?</Button>
                     </Stack>
                   </Box>

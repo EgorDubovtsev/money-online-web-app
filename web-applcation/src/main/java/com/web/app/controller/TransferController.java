@@ -27,17 +27,25 @@ public class TransferController {
     public ResponseEntity<String> transfer(@RequestBody TransactionDto transactionDto, Principal principal) {
         log.debug("POST /transfer Request: {}", transactionDto);
 
-        if (!Objects.equals(transactionDto.getUserLoginFrom(), principal.getName())){
+        if (!Objects.equals(transactionDto.getUserLoginFrom(), principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if (transactionService.isTransactionValid(transactionDto)) {
-            transactionService.executeTransaction(transactionDto);
-            
-            return ResponseEntity.ok().build();
-        } else {
 
-            return new ResponseEntity<>(TRANSACTION_ERROR,HttpStatus.BAD_REQUEST);
+        try {
+            if (transactionService.isTransactionValid(transactionDto)) {
+                transactionService.executeTransaction(transactionDto);
+
+                return ResponseEntity.ok().build();
+
+            }
+
+        } catch (Exception e) {
+            log.error("/transfer", e);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(TRANSACTION_ERROR);
+
         }
+
+        return new ResponseEntity<>(TRANSACTION_ERROR, HttpStatus.BAD_REQUEST);
     }
 }

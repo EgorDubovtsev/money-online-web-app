@@ -21,7 +21,6 @@ public class AccountService {
 
     public ClientEntity create(ClientDto clientDto) {
         ClientEntity client = new ClientEntity(clientDto);
-        client.setBalance(new BigDecimal(0));
         return clientRepository.save(client);
     }
 }

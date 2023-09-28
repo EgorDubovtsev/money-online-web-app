@@ -62,7 +62,6 @@ public class SimpleTransactionService implements TransactionService {
             clientDest.setBalance(clientDest.getBalance().add(transaction.getAmount()));
 
             transactionEntity.setStatus(Status.FINISHED);
-            //save trans
 
         } else {
             log.debug("Транзакция отклонена {}", transaction);

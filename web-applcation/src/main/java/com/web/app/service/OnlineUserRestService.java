@@ -2,18 +2,23 @@ package com.web.app.service;
 
 import com.web.app.entity.UserEntity;
 import com.web.app.service.dto.TransferClientDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
 import java.util.HashMap;
 
+@Slf4j
 @Service
 @Profile("prod")
 public class OnlineUserRestService implements UserRestService {
@@ -36,8 +41,9 @@ public class OnlineUserRestService implements UserRestService {
 
 
     @Override
+    @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
     public void registerUserInTransactionService(UserEntity userEntity) {
-        URI uri = URI.create(transactionServiceUrl + transactionServiceCreateUserPath);
+        String url = transactionServiceUrl + transactionServiceCreateUserPath;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBasicAuth(transactionServiceUsername, transactionServicePassword);
@@ -46,10 +52,19 @@ public class OnlineUserRestService implements UserRestService {
         TransferClientDto transferClientDto = new TransferClientDto(userEntity.getId(), userEntity.getAccountNumber(), userEntity.getBalance(), userEntity.getCurrency());
         HttpEntity<TransferClientDto> entity = new HttpEntity<>(transferClientDto, headers);
 
-        restTemplate.postForEntity(uri, entity, TransferClientDto.class);
+        try {
+
+            restTemplate.exchange(url, HttpMethod.POST, entity, TransferClientDto.class, new HashMap<>());
+
+        } catch (ResourceAccessException e) {
+            log.error("Во время создания пользователя произошла ошибка.", e);
+            throw new ResourceAccessException(e.getMessage());
+        }
     }
 
     @Override
+    @Transactional
+    @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
     public TransferClientDto getClientData(Long clientId) {
         String url = transactionServiceUrl + transactionServiceGetClientDataPath;
         HashMap<String, String> params = new HashMap<>();
@@ -58,6 +73,7 @@ public class OnlineUserRestService implements UserRestService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBasicAuth(transactionServiceUsername, transactionServicePassword);
+
         HttpEntity<TransferClientDto> entity = new HttpEntity<>(headers);
 
         return restTemplate.exchange(url, HttpMethod.GET, entity, TransferClientDto.class, params).getBody();

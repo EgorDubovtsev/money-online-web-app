@@ -1,4 +1,4 @@
-package com.transfer.online.dto;
+package com.web.app.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.moneyonline.commons.entity.Currency;
@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TransactionDto {
+public class TransactionTsDto {
     @JsonProperty
     private String accountSource;
     @JsonProperty

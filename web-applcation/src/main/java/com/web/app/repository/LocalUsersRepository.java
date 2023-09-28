@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.LongStream;
 
-import static com.web.app.consts.Const.INITIAL_BALANCE;
-
 @Slf4j
 @Component
 @Profile("local")
@@ -92,7 +90,6 @@ public class LocalUsersRepository implements UsersRepository {
     @Override
     public void createUser(UserEntity user) {
         user.setId(generateId());
-        user.setBalance(INITIAL_BALANCE);
         user.setRoles(Collections.singletonList("USER"));
         LocalUsersRepository.users.add(user);
     }

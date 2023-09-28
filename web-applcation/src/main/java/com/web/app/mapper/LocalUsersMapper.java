@@ -37,8 +37,4 @@ public interface LocalUsersMapper {
         return authorities;
     }
 
-//    @Mapping(target = "role", source = "roles")
-//    @Mapping(target = "username", source = "username")
-//    @Mapping(target = "password", source = "password")
-//    UserEntity userDetailsToUser(User user);
 }

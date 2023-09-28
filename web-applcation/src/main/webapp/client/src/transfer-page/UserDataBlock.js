@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { createTransfer } from "../utils/utils";
-import { Alert } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { SUCCESS_CODE } from "../utils/consts";
 
 let backgroundColor= '#348DE5'
@@ -71,6 +71,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
   const [transferAmount, setTransferAmount] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
   const [transferError, setTransferError] = React.useState(null);
+  const [isSubmitting, setSubmitting] = React.useState(false);
 
   useEffect(()=> {
     if (isPersonal) {
@@ -90,12 +91,19 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
 
   const createTransition = (accountLoginTo, amount) => {
     createTransfer(currentUser.username, accountLoginTo, amount).catch(res=>{
+      setSubmitting(false);  
+      if (res.response) {
         setTransferError(res.response.data);
+      } 
+
     }).then(response => {
-      if (response.status === SUCCESS_CODE) {
-        setIsOpen(false);
-        updateCurrentUserBalance();
-      }
+        setSubmitting(false)
+        if (response && response.status === SUCCESS_CODE) {
+
+          updateCurrentUserBalance();
+          setIsOpen(false);
+        }
+      setTransferAmount(0)
     })
     
   } 
@@ -105,6 +113,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
   } 
 
   const handleTransfer = () => {
+    setSubmitting(true)
     createTransition(user.username, transferAmount);
   };
 
@@ -153,8 +162,12 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
                     />
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={()=>handleClose()}>Отмена</Button>
-                    <Button onClick={()=>handleTransfer()} disabled={transferError !== null}>Перевести</Button>
+                    {isSubmitting ? <CircularProgress /> :
+                     <>
+                      <Button onClick={()=>handleClose()}>Отмена</Button>
+                      <Button onClick={()=>handleTransfer()} disabled={transferError !== null}>Перевести</Button>
+                    </>}
+                    
                   </DialogActions>
                 </Dialog>
     </>
