@@ -1,6 +1,7 @@
 package com.web.app.service;
 
 
+import com.moneyonline.commons.entity.Currency;
 import com.web.app.entity.UserEntity;
 import com.web.app.repository.UsersRepository;
 import com.web.app.service.dto.TransferClientDto;
@@ -8,13 +9,12 @@ import com.web.app.service.entity.Errors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.ResourceAccessException;
 
-import javax.annotation.PostConstruct;
-import java.net.ConnectException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -30,11 +30,16 @@ public class UsersService {
     private UsersRepository usersRepository;
     private UserRestService userRestService;
 
-    @PostConstruct
-    private void createDefaultUser() {
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void createDefaultUser() {
         usersRepository.getAllUsers()
-                .forEach(userEntity ->
-                        userRestService.registerUserInTransactionService(userEntity)
+                .forEach(userEntity -> {
+                            userEntity.setBalance(INITIAL_BALANCE);
+                            userEntity.setCurrency(Currency.RUB);
+                            userRestService.registerUserInTransactionService(userEntity);
+
+                        }
                 );
     }
 

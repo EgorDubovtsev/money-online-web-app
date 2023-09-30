@@ -118,6 +118,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
   };
 
   const handleClose = () => {
+    setTransferAmount(0)
     setIsOpen(false);
   };
 
@@ -153,6 +154,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
                       autoFocus
                       value={transferAmount}
                       onChange={amountChangeHandler}
+                      onFocus={()=>setTransferAmount("")}
                       margin="dense"
                       id="amount"
                       label="Сумма в рублях"

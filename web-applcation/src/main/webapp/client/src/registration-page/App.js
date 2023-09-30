@@ -114,6 +114,7 @@ const App= () => {
                 errors,
                 touched,
                 handleBlur,
+                isSubmitting,
                 handleSubmit,
                 handleChange,
               }) => (
@@ -194,7 +195,7 @@ const App= () => {
                         <MenuItem value="USD">USD</MenuItem>
                       </Select>
                       
-                      <Button variant="contained" type="submit">Зарегистрироваться</Button>
+                      <Button variant="contained" disabled={isSubmitting} type="submit">Зарегистрироваться</Button>
                       <FormHelperText filled error>{submitError}</FormHelperText>
                       <Button onClick={loginHandler}>Уже есть аккаунт?</Button>
                     </Stack>

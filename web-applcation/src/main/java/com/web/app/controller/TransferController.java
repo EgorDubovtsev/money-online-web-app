@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -40,9 +41,13 @@ public class TransferController {
 
             }
 
+        } catch (HttpClientErrorException e) {
+            log.error("/transfer", e);
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+
         } catch (Exception e) {
             log.error("/transfer", e);
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(TRANSACTION_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(TRANSACTION_ERROR);
 
         }
 

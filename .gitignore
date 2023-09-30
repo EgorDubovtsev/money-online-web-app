@@ -7,7 +7,7 @@ node_modules
 target
 # Log file
 *.log
-
+*.bundle.js
 # BlueJ files
 *.ctxt
 

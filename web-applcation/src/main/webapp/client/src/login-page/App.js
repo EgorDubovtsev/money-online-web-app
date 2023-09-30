@@ -82,6 +82,7 @@ const App = () => {
                 values,
                 errors,
                 touched,
+                isSubmitting,
                 handleBlur,
                 handleSubmit,
                 handleChange
@@ -113,7 +114,7 @@ const App = () => {
                         helperText={touched.password && errors.password}
                         label="Пароль"
                       />
-                      <Button variant="contained" type="submit">Войти</Button>
+                      <Button variant="contained" type="submit" disabled={isSubmitting}>Войти</Button>
                       <FormHelperText filled error>{submitError}</FormHelperText>
                       <Button onClick={registrationHandler}>Зарегистрироваться</Button>
                     </Stack>
