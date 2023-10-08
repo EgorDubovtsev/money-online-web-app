@@ -9,7 +9,7 @@ public interface UserRestService {
      *
      * @param userEntity Пользователь для регистрации.
      */
-    void registerUserInTransactionService(UserEntity userEntity);
+    TransferClientDto registerUserInTransactionService(UserEntity userEntity);
 
 
     /**

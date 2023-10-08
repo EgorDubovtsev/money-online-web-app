@@ -1,6 +1,7 @@
 package com.web.app.controller;
 
 
+import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.entity.UserEntity;
 import com.web.app.service.UsersService;
 import com.web.app.service.entity.Errors;
@@ -34,6 +35,7 @@ public class IndexController {
         return "registration";
     }
 
+    @Profiling
     @PostMapping(value = "/registration/process", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> registrationProcess(@RequestBody UserEntity user) {
         Errors errors = usersService.validateUserCreate(user);

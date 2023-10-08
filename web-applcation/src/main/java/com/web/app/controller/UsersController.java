@@ -1,6 +1,7 @@
 package com.web.app.controller;
 
 import com.google.gson.Gson;
+import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.entity.UserEntity;
 import com.web.app.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class UsersController {
     private final Gson MAPPER = new Gson();
     private final UsersService usersService;
 
+    @Profiling
     @GetMapping("/transfer/available")
     public ResponseEntity<String> getAvailableForTransfer(Principal principal) {
         log.debug("GET /transfer/available user={}", principal.getName());
@@ -32,6 +34,7 @@ public class UsersController {
         return ResponseEntity.ok(MAPPER.toJson(users));
     }
 
+    @Profiling
     @GetMapping("/current")
     public ResponseEntity<String> getAuthenticatedUserInfo(Principal principal) {
         log.debug("GET /current user={}", principal.getName());

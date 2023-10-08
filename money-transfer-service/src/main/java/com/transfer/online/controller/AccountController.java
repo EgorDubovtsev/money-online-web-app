@@ -1,6 +1,7 @@
 package com.transfer.online.controller;
 
 import com.google.gson.Gson;
+import com.moneyonline.commons.annotation.Profiling;
 import com.transfer.online.cosnts.Const;
 import com.transfer.online.dto.ClientDto;
 import com.transfer.online.entity.ClientEntity;
@@ -24,11 +25,9 @@ import static com.transfer.online.cosnts.Const.CLIENT_NOT_FOUND;
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class AccountController {
     private final AccountService accountService;
-    private final JdbcTemplate jdbcTemplate;
-    private final ClientRepository clientRepository;
-    private final TransactionRepository transactionRepository;
     private static final Gson MAPPER = new Gson();
 
+    @Profiling
     @GetMapping(path = "/{clientId}/data")
     public ResponseEntity<String> getClientData(@PathVariable String clientId) {
         log.debug("GET /{clientId}/data account: {}", clientId);
@@ -40,10 +39,12 @@ public class AccountController {
                 .body(CLIENT_NOT_FOUND);
     }
 
+    @Profiling
     @PostMapping(path = "/create")
     public ResponseEntity<String> create(@RequestBody ClientDto clientDto) {
         log.debug("POST /create client: {}", clientDto);
         ClientEntity client = accountService.create(clientDto);
-        return ResponseEntity.ok(MAPPER.toJson(client));
+
+        return ResponseEntity.ok(MAPPER.toJson(new ClientDto(client)));
     }
 }

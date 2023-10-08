@@ -1,14 +1,12 @@
 package com.web.app.service;
 
+import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.entity.UserEntity;
 import com.web.app.service.dto.TransferClientDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -41,8 +39,9 @@ public class OnlineUserRestService implements UserRestService {
 
 
     @Override
+    @Profiling
     @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
-    public void registerUserInTransactionService(UserEntity userEntity) {
+    public TransferClientDto registerUserInTransactionService(UserEntity userEntity) {
         String url = transactionServiceUrl + transactionServiceCreateUserPath;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -54,7 +53,8 @@ public class OnlineUserRestService implements UserRestService {
 
         try {
 
-            restTemplate.exchange(url, HttpMethod.POST, entity, TransferClientDto.class, new HashMap<>());
+            ResponseEntity<TransferClientDto> response = restTemplate.exchange(url, HttpMethod.POST, entity, TransferClientDto.class, new HashMap<>());
+            return response.getBody();
 
         } catch (ResourceAccessException e) {
             log.error("Во время создания пользователя произошла ошибка.", e);

@@ -5,7 +5,6 @@ import com.transfer.online.dto.TransactionDto;
 import com.transfer.online.entity.ClientEntity;
 import com.transfer.online.entity.Transaction;
 import com.transfer.online.repository.ClientRepository;
-import com.transfer.online.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ import java.time.Instant;
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class SimpleTransactionService implements TransactionService {
     private final ClientRepository clientRepository;
-    private final TransactionRepository transactionRepository;
     private final EntityManager entityManager;
 
     @Override
@@ -45,6 +43,7 @@ public class SimpleTransactionService implements TransactionService {
     }
 
     @Override
+    @Transactional
     public Long executeTransaction(TransactionDto transaction) {
         log.debug("Обработка запроса на выполение транзацкии {}", transaction);
 
@@ -53,8 +52,7 @@ public class SimpleTransactionService implements TransactionService {
         Transaction transactionEntity = new Transaction(transaction);
         transactionEntity.setCreated(Timestamp.from(Instant.now()));
 
-        entityManager.lock(clientSrc, LockModeType.PESSIMISTIC_WRITE);
-        entityManager.lock(clientDest, LockModeType.PESSIMISTIC_WRITE);
+        lockAccounts(clientSrc, clientDest);
 
         if (isTransactionValid(transaction)) {
             log.debug("Выполнение транзацкии {}", transaction);
@@ -69,9 +67,24 @@ public class SimpleTransactionService implements TransactionService {
 
         }
         entityManager.persist(transactionEntity);
-        entityManager.lock(clientSrc, LockModeType.NONE);
-        entityManager.lock(clientDest, LockModeType.NONE);
+        unlockAccounts(clientSrc, clientDest);
 
         return transactionEntity.getId();
+    }
+
+    private void lockAccounts(ClientEntity client1, ClientEntity client2) {
+        ClientEntity userWithHigherId = client1.getId() > client2.getId() ? client1 : client2;
+        ClientEntity userWithLowerId = client1.getId() < client2.getId() ? client1 : client2;
+
+        entityManager.lock(userWithHigherId, LockModeType.PESSIMISTIC_WRITE);
+        entityManager.lock(userWithLowerId, LockModeType.PESSIMISTIC_WRITE);
+    }
+
+    private void unlockAccounts(ClientEntity client1, ClientEntity client2) {
+        ClientEntity userWithHigherId = client1.getId() > client2.getId() ? client1 : client2;
+        ClientEntity userWithLowerId = client1.getId() < client2.getId() ? client1 : client2;
+
+        entityManager.lock(userWithLowerId, LockModeType.NONE);
+        entityManager.lock(userWithHigherId, LockModeType.NONE);
     }
 }

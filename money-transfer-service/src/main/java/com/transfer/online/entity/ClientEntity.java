@@ -2,14 +2,12 @@ package com.transfer.online.entity;
 
 import com.moneyonline.commons.entity.Currency;
 import com.transfer.online.dto.ClientDto;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -25,8 +23,6 @@ public class ClientEntity {
     private String account;
     private BigDecimal balance;
     private Currency currency;
-    @Version
-    private long version;
 
     public ClientEntity(ClientDto clientDto) {
         this.clientId = clientDto.getClientId();

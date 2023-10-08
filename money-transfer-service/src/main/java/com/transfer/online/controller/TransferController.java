@@ -1,5 +1,6 @@
 package com.transfer.online.controller;
 
+import com.moneyonline.commons.annotation.Profiling;
 import com.transfer.online.dto.TransactionDto;
 import com.transfer.online.entity.Transaction;
 import com.transfer.online.service.TransactionService;
@@ -22,18 +23,23 @@ import static com.transfer.online.cosnts.Const.INVALID_TRANSACTION_ERROR;
 public class TransferController {
     private final TransactionService transactionService;
 
+    @Profiling
     @PostMapping
     @RequestMapping("/transfer")
     public ResponseEntity<String> transfer(@RequestBody TransactionDto transactionDto) {
         log.debug("POST: /ts/transfer from: {}, to: {}, amount: {} {}", transactionDto.getAccountSource(), transactionDto.getAccountDestination(), transactionDto.getAmount(), transactionDto.getCurrency());
 
-        if (transactionService.isTransactionValid(transactionDto)) {
-            log.debug("Транзакция доступна к выполнению. from={} to={}", transactionDto.getAccountSource(), transactionDto.getAccountDestination());
-            Long transactionCode = transactionService.executeTransaction(transactionDto);
-            return ResponseEntity.ok(transactionCode.toString());
+        try {
+            if (transactionService.isTransactionValid(transactionDto)) {
+                log.debug("Транзакция доступна к выполнению. from={} to={}", transactionDto.getAccountSource(), transactionDto.getAccountDestination());
+                Long transactionCode = transactionService.executeTransaction(transactionDto);
+                return ResponseEntity.ok(transactionCode.toString());
 
-        } else {
-            return new ResponseEntity<>(INVALID_TRANSACTION_ERROR ,HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            log.warn("/transfer", e);
         }
+
+        return new ResponseEntity<>(INVALID_TRANSACTION_ERROR, HttpStatus.BAD_REQUEST);
     }
 }

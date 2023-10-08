@@ -17,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.stream.Collectors;
 
-import static com.web.app.consts.Const.ACCOUNT_NUMBER_SYMBOL_COUNT;
 import static com.web.app.consts.Const.INITIAL_BALANCE;
 
 @Service
@@ -37,8 +35,9 @@ public class UsersService {
                 .forEach(userEntity -> {
                             userEntity.setBalance(INITIAL_BALANCE);
                             userEntity.setCurrency(Currency.RUB);
-                            userRestService.registerUserInTransactionService(userEntity);
-
+                            TransferClientDto createdUserAccountDto = userRestService.registerUserInTransactionService(userEntity);
+                            userEntity.setAccountNumber(createdUserAccountDto.getAccount());
+                            usersRepository.saveUserChanges(userEntity);
                         }
                 );
     }
@@ -75,12 +74,13 @@ public class UsersService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = RuntimeException.class)
     public void createUser(UserEntity user) {
-        user.setAccountNumber(generateAccountNumber());
 
         try {
-            user.setBalance(INITIAL_BALANCE);
             usersRepository.createUser(user);
-            userRestService.registerUserInTransactionService(user);
+            TransferClientDto createdUserAccountDto = userRestService.registerUserInTransactionService(user);
+            user.setAccountNumber(createdUserAccountDto.getAccount());
+            user.setBalance(createdUserAccountDto.getBalance());
+            usersRepository.saveUserChanges(user);
 
         } catch (Exception e) {
             log.warn("Во время создания пользователя просизошла ошибка. User: {}", user);
@@ -97,15 +97,6 @@ public class UsersService {
             return errors.addError("Пользователь с таким email уже зарегистрирован.");
         }
         return errors;
-    }
-
-    private String generateAccountNumber() {
-        StringBuilder stringBuilder = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < ACCOUNT_NUMBER_SYMBOL_COUNT; i++) {
-            stringBuilder.append(random.nextInt(10));
-        }
-        return stringBuilder.toString();
     }
 
     public UserEntity getUserById(Long userId) {

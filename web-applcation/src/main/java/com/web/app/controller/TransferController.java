@@ -1,5 +1,6 @@
 package com.web.app.controller;
 
+import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.controller.dto.TransactionDto;
 import com.web.app.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import static com.web.app.consts.Const.TRANSACTION_ERROR;
 public class TransferController {
     private final TransactionService transactionService;
 
+    @Profiling
     @PostMapping(path = "/transfer", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> transfer(@RequestBody TransactionDto transactionDto, Principal principal) {
         log.debug("POST /transfer Request: {}", transactionDto);
