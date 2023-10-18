@@ -1,10 +1,10 @@
 import { Box, Button, FormHelperText, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BASE_URL, LOGIN_PATH, SUCCESS_CODE } from "../utils/consts";
 import InputMask from 'react-input-mask';
-import { formatDate, isDateValid, registration } from "../utils/utils";
+import { formatDate, getCurrencies, isDateValid, registration } from "../utils/utils";
 
 const ADULT_AGE = 18;
 const Form = styled.form`
@@ -82,8 +82,17 @@ const createRegistrationFormdata = (values) => {
   return form
 } 
 
-const App= () => {
+
+
+const App = () => {
   const [submitError, setSubmitError] = useState();
+  const [currencies, setCurrencies] = useState([]);
+
+  useEffect(() => {
+    getCurrencies().then(response =>{
+      setCurrencies(response.data)
+    })
+  }, [])
 
   const submitHandler = (values, { setSubmitting }) => {
     setSubmitting(true)
@@ -108,6 +117,7 @@ const App= () => {
               initialValues={{ username: '', name: '', password: '', passwordSec: '', birthdate: '', currency: 'None' }}
               validate={validateForm}
               onSubmit={submitHandler}
+              currencies={currencies}
             >
               {({
                 values,
@@ -191,8 +201,7 @@ const App= () => {
                         value={values.currency}
                       >
                         <MenuItem value="None" disabled>Валюта счета</MenuItem>
-                        <MenuItem value="RUB">RUB</MenuItem>
-                        <MenuItem value="USD">USD</MenuItem>
+                        {currencies.length!=0 && currencies.map(currency => <MenuItem key={currency} value={currency}>{currency}</MenuItem>)}
                       </Select>
                       
                       <Button variant="contained" disabled={isSubmitting} type="submit">Зарегистрироваться</Button>

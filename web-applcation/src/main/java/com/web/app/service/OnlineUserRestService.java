@@ -22,8 +22,8 @@ import java.util.HashMap;
 public class OnlineUserRestService implements UserRestService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${services.transactionService.url}")
-    private String transactionServiceUrl;
+    @Value("${services.transactionService.host}")
+    private String transactionServiceHost;
 
     @Value("${services.transactionService.createUserPath}")
     private String transactionServiceCreateUserPath;
@@ -42,7 +42,7 @@ public class OnlineUserRestService implements UserRestService {
     @Profiling
     @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
     public TransferClientDto registerUserInTransactionService(UserEntity userEntity) {
-        String url = transactionServiceUrl + transactionServiceCreateUserPath;
+        String url = transactionServiceHost + transactionServiceCreateUserPath;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBasicAuth(transactionServiceUsername, transactionServicePassword);
@@ -66,7 +66,7 @@ public class OnlineUserRestService implements UserRestService {
     @Transactional
     @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
     public TransferClientDto getClientData(Long clientId) {
-        String url = transactionServiceUrl + transactionServiceGetClientDataPath;
+        String url = transactionServiceHost + transactionServiceGetClientDataPath;
         HashMap<String, String> params = new HashMap<>();
         params.put("clientId", String.valueOf(clientId));
 

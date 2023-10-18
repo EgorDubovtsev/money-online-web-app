@@ -27,8 +27,8 @@ public class OnlineMoneyTransferService implements TransactionService {
     private final UsersService usersService;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${services.transactionService.url}")
-    private String transactionServiceUrl;
+    @Value("${services.transactionService.host}")
+    private String transactionServiceHost;
 
     @Value("${services.transactionService.transferPath}")
     private String transactionServiceTransferPath;
@@ -62,7 +62,7 @@ public class OnlineMoneyTransferService implements TransactionService {
         UserEntity userFrom = usersService.getUserInfoByUsername(transactionDto.getUserLoginFrom());
         UserEntity userTo = usersService.getUserInfoByUsername(transactionDto.getUserLoginTo());
 
-        String url = transactionServiceUrl + transactionServiceTransferPath;
+        String url = transactionServiceHost + transactionServiceTransferPath;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

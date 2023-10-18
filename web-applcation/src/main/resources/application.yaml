@@ -23,8 +23,13 @@ server:
   port: 8080
 
 services:
+  currencyService:
+    host: http://localhost:8090
+    getCurrenciesPath: /currency/available
+    convertPath: /rate/convert
+    getCourcePath: /rate/${currencyCode}
   transactionService:
-    url: http://localhost:8081
+    host: http://localhost:8081
     createUserPath: /ts/create
     getClientDataPath: /ts/{clientId}/data
     transferPath: /ts/transfer

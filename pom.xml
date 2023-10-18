@@ -17,6 +17,7 @@
         <module>money-transfer-service</module>
         <module>web-applcation</module>
         <module>commons</module>
+        <module>currency-service</module>
     </modules>
     <dependencies>
         <dependency>

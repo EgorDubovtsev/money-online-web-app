@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { BASE_URL, CREATE_TRANSFER_PATH, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, REGISTRATION_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH, LOGOUT_PATH } from './consts'
+import { BASE_URL, CREATE_TRANSFER_PATH, GET_CURRENT_USER_PATH, LOGIN_PROCESS_PATH, REGISTRATION_PROCESS_PATH, USERS_AVAILABLE_FOR_TRANSFER_PATH, LOGOUT_PATH, GET_CURRENCIES_PATH } from './consts'
 
 export const formatDate = (date) => {
     const dateParts = date.split("/")
@@ -51,4 +51,9 @@ export function createTransfer(userFrom, userTo, amount) {
 export function logout() {
     const url = BASE_URL + LOGOUT_PATH;
     window.location.replace(url);
+}
+
+export async function getCurrencies() {
+    const url = BASE_URL + GET_CURRENCIES_PATH;
+    return axios.get(url)
 }
