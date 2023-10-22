@@ -24,6 +24,11 @@ public class AccountService {
         ClientEntity client = new ClientEntity(clientDto);
         client.setAccount(Util.generateAccountNumber());
         client.setBalance(INITIAL_BALANCE);
+
+        ClientEntity existedUserWithThisId = clientRepository.findByClientId(clientDto.getClientId());
+        if (existedUserWithThisId != null) {
+            return existedUserWithThisId;
+        }
         return clientRepository.save(client);
     }
 

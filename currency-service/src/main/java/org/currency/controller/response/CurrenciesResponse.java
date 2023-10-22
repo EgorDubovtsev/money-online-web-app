@@ -1,10 +1,10 @@
 package org.currency.controller.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.currency.controller.response.dto.CurrencyDto;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CurrenciesResponse {
-    private List<String> currencies;
+    private List<CurrencyDto> currencies;
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -23,6 +24,7 @@ import java.time.Instant;
 public class SimpleTransactionService implements TransactionService {
     private final ClientRepository clientRepository;
     private final EntityManager entityManager;
+    private final CurrencyService currencyService;
 
     @Override
     public boolean isTransactionValid(TransactionDto transaction) {
@@ -31,11 +33,16 @@ public class SimpleTransactionService implements TransactionService {
         if (clientDest == null || clientSrc == null) {
             return false;
         }
+
         if (clientSrc.getBalance().compareTo(transaction.getAmount()) < 0) {
             return false;
         }
-        if (clientSrc.getCurrency() != clientDest.getCurrency()
-                || clientSrc.getCurrency() != transaction.getCurrency()) {
+        BigDecimal amount = transaction.getAmount();
+        if (!clientSrc.getCurrency().equals(clientDest.getCurrency())) {
+            amount = currencyService.convert(transaction.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
+        }
+
+        if (clientSrc.getBalance().compareTo(amount) < 0) {
             return false;
         }
 
@@ -55,9 +62,13 @@ public class SimpleTransactionService implements TransactionService {
         lockAccounts(clientSrc, clientDest);
 
         if (isTransactionValid(transaction)) {
-            log.debug("Выполнение транзацкии {}", transaction);
-            clientSrc.setBalance(clientSrc.getBalance().subtract(transaction.getAmount()));
-            clientDest.setBalance(clientDest.getBalance().add(transaction.getAmount()));
+            log.info("Транзакция доступна к выполению. {}", transaction);
+            BigDecimal amount = transaction.getAmount();
+            if (!clientSrc.getCurrency().equals(clientDest.getCurrency())) {
+                amount = currencyService.convert(transaction.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
+            }
+            clientSrc.setBalance(clientSrc.getBalance().subtract(amount));
+            clientDest.setBalance(clientDest.getBalance().add(amount));
 
             transactionEntity.setStatus(Status.FINISHED);
 

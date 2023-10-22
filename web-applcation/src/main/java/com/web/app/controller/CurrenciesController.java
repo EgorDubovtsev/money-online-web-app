@@ -2,6 +2,7 @@ package com.web.app.controller;
 
 import com.google.gson.Gson;
 import com.web.app.service.CurrencyService;
+import com.web.app.service.dto.Currency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ public class CurrenciesController {
 
     @GetMapping("/currencies")
     public ResponseEntity<String> getCurrencies() {
-        List<String> currencies = currencyService.getCurrencies();
+        List<Currency> currencies = currencyService.getCurrencies();
 
         return ResponseEntity.ok(OBJECT_MAPPER.toJson(currencies));
     }
+
 }

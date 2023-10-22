@@ -201,7 +201,7 @@ const App = () => {
                         value={values.currency}
                       >
                         <MenuItem value="None" disabled>Валюта счета</MenuItem>
-                        {currencies.length!=0 && currencies.map(currency => <MenuItem key={currency} value={currency}>{currency}</MenuItem>)}
+                        {currencies.length !=0 && currencies.map(currency => <MenuItem key={currency.code} value={currency.code}>{currency.code}</MenuItem>)}
                       </Select>
                       
                       <Button variant="contained" disabled={isSubmitting} type="submit">Зарегистрироваться</Button>

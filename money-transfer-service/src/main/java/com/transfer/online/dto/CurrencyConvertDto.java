@@ -1,14 +1,18 @@
-package org.currency.controller.request;
+package com.transfer.online.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@AllArgsConstructor
+import java.math.BigDecimal;
+
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@ToString
-public class ConvertRequest {
+public class CurrencyConvertDto {
     @JsonProperty
     private String amount;
     @JsonProperty

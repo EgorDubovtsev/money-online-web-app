@@ -19,7 +19,7 @@ public class TransactionDto {
     @JsonProperty
     private String accountDestination;
     @JsonProperty
-    private Currency currency;
+    private String currency;
     @JsonProperty
     private BigDecimal amount;
 }

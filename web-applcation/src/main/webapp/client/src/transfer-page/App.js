@@ -3,14 +3,14 @@ import Typography from '@mui/material/Typography';
 import { UserDataBlock } from './UserDataBlock';
 import styled from "styled-components";
 import CircularProgress from '@mui/material/CircularProgress';
-import { getCurrentUserFullInfo, getUsersAvailableForTransfer, logout } from "../utils/utils";
+import { getCurrencies, getCurrentUserFullInfo, getUsersAvailableForTransfer, logout } from "../utils/utils";
 import { Button } from "@mui/material";
 
 const MainWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  backgroundColor: #ECFBE0;
+  background-color: #ECFBE0;
   height: 70vh;
 `
 const Column = styled.div`
@@ -31,16 +31,54 @@ const ButtonWrapper = styled.div`
   width: 100vh;
   justify-content: center;
 `
+const CurrenciesWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  heigth: 600px;
+  padding-left: 10%;
+  background-color: #ECFBE0;
+`
 
+const Currency = styled.div`
+  display: flex;
+  width: 250px;
+  background-color: #348DE5;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+  justify-content: center;
+`
+const CurrencyHeader = styled.div`
+  width: 100%;
+  font-size: 20px;
+  text-align: left;
+  padding-left: 50px;
+`
+
+const IndexWrapper = styled.div`
+  background-color: #ECFBE0;
+  margin-top: -10px;
+  margin-left: -10px;
+`
 
 const App = () => {
 const [usersForTransfer, setUsersForTransfer] = useState([])
 const [currentUser, setCurrentUser] = useState()
+const [currencies, setCurrencies] = useState()
 
   useEffect(() => {
     setCurrentUserInfo()
     setUsersForTransferInfo()
+    fetchCurrenciesRates()
   }, [])
+
+  const fetchCurrenciesRates = () => {
+    getCurrencies().then(response =>{
+      setCurrencies(response.data)
+    })
+  }
 
   const setCurrentUserInfo = () => {
     getCurrentUserFullInfo().then(response => {
@@ -63,7 +101,11 @@ const [currentUser, setCurrentUser] = useState()
   }
 
   return (
-    <>
+    <IndexWrapper>
+      <CurrenciesWrapper>
+        <CurrencyHeader>Курсы валют</CurrencyHeader>
+        {currencies && currencies.map(currency=> <Currency><h3>{currency.code} - {currency.rate}руб.</h3></Currency>)}
+      </CurrenciesWrapper>
       <MainWrapper>
         <MainUser>
           {currentUser != undefined && <UserDataBlock user={currentUser} isPersonal={true} updateCurrentUserBalance={setCurrentUserInfo}/>}
@@ -77,7 +119,7 @@ const [currentUser, setCurrentUser] = useState()
        <ButtonWrapper>
          <Button variant="outlined" onClick={logoutHandler}>Выход</Button>
        </ButtonWrapper>
-    </>
+    </IndexWrapper>
 
   );
 }

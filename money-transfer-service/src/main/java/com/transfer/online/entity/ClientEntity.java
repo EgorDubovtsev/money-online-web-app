@@ -18,11 +18,11 @@ public class ClientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
-
+    @Column(unique = true)
     private Long clientId;
     private String account;
     private BigDecimal balance;
-    private Currency currency;
+    private String currency;
 
     public ClientEntity(ClientDto clientDto) {
         this.clientId = clientDto.getClientId();

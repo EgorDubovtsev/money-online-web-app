@@ -30,12 +30,9 @@ public class TransferController {
         log.debug("POST: /ts/transfer from: {}, to: {}, amount: {} {}", transactionDto.getAccountSource(), transactionDto.getAccountDestination(), transactionDto.getAmount(), transactionDto.getCurrency());
 
         try {
-            if (transactionService.isTransactionValid(transactionDto)) {
-                log.debug("Транзакция доступна к выполнению. from={} to={}", transactionDto.getAccountSource(), transactionDto.getAccountDestination());
-                Long transactionCode = transactionService.executeTransaction(transactionDto);
-                return ResponseEntity.ok(transactionCode.toString());
+            Long transactionCode = transactionService.executeTransaction(transactionDto);
+            return ResponseEntity.ok(transactionCode.toString());
 
-            }
         } catch (Exception e) {
             log.warn("/transfer", e);
         }

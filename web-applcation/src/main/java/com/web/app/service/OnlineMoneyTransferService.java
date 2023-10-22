@@ -42,12 +42,10 @@ public class OnlineMoneyTransferService implements TransactionService {
     @Override
     public boolean isTransactionValid(TransactionDto transactionDto) {
         UserEntity userFrom = usersService.getUserInfoByUsername(transactionDto.getUserLoginFrom());
-        UserEntity userTo = usersService.getUserInfoByUsername(transactionDto.getUserLoginTo());
 
-        boolean isTransactionValid = userFrom.getCurrency().equals(userTo.getCurrency());
         BigDecimal amount = new BigDecimal(transactionDto.getAmount());
-        isTransactionValid = isTransactionValid && amount.compareTo(BigDecimal.ZERO) > 0;
         userFrom.lock();
+        boolean isTransactionValid =  amount.compareTo(BigDecimal.ZERO) > 0;
 
         isTransactionValid = isTransactionValid && userFrom.getBalance().compareTo(amount) >= 0;
 

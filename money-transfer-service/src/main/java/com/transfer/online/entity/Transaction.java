@@ -1,6 +1,5 @@
 package com.transfer.online.entity;
 
-import com.moneyonline.commons.entity.Currency;
 import com.transfer.online.cosnts.Status;
 import com.transfer.online.dto.TransactionDto;
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class Transaction {
     private String accountSource;
     @Column(name = "account_destination")
     private String accountDestination;
-    private Currency currency;
+    private String currency;
     private BigDecimal amount;
     private Status status;
     private Timestamp created;

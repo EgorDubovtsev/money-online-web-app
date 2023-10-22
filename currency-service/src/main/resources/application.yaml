@@ -1,2 +1,6 @@
 server:
   port: 8090
+
+retry:
+  maxAttempts: 4
+  delay: 1000

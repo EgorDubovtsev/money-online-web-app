@@ -1,10 +1,10 @@
 package com.web.app.service;
 
 import com.web.app.service.dto.CurrenciesDto;
+import com.web.app.service.dto.Currency;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class SimpleCurrencyService implements CurrencyService {
     @Override
     @Transactional
     @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
-    public List<String> getCurrencies() {
+    public List<Currency> getCurrencies() {
         String url = currencyServiceHost + getCurrenciesPath;
         CurrenciesDto response = restTemplate.exchange(url, HttpMethod.GET, null, CurrenciesDto.class, new HashMap<>()).getBody();
 

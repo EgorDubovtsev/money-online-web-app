@@ -17,7 +17,7 @@ spring:
 
 services:
   currencyService:
-    url: http://localhost:8090
+    host: http://localhost:8090
     getCurreniesPath: /currency/available
     convertPath: /rate/convert
     getCourcePath: /rate/${currencyCode}

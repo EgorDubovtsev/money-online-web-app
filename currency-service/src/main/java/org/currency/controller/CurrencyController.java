@@ -3,6 +3,7 @@ package org.currency.controller;
 import com.google.gson.Gson;
 import com.moneyonline.commons.annotation.Profiling;
 import org.currency.controller.response.CurrenciesResponse;
+import org.currency.controller.response.dto.CurrencyDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,13 @@ public class CurrencyController {
     @Profiling
     @GetMapping("/available")
     public ResponseEntity<CurrenciesResponse> availableCurrencies() {
-
-        return ResponseEntity.ok(new CurrenciesResponse(Arrays.asList("RUB", "USD", "EUR")));
+        /*
+            Todo: подять базу и в ней хранить курсы?
+                При обновлении курса по шедулеру - отсылать эвернт в подписчиков?
+         */
+        return ResponseEntity.ok(new CurrenciesResponse(Arrays.asList(
+                new CurrencyDto("RUB", "1"),
+                new CurrencyDto("USD", "80.3"),
+                new CurrencyDto("EUR", "90.1"))));
     }
 }

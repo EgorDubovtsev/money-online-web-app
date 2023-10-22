@@ -20,7 +20,7 @@ public class ClientDto {
     @JsonProperty
     private BigDecimal balance;
     @JsonProperty
-    private Currency currency;
+    private String currency;
 
     public ClientDto(ClientEntity client) {
         this.clientId = client.getClientId();

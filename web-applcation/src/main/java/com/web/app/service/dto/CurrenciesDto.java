@@ -9,5 +9,5 @@ import java.util.List;
 @Setter
 public class CurrenciesDto {
     @JsonProperty
-    private List<String> currencies;
+    private List<Currency> currencies;
 }
