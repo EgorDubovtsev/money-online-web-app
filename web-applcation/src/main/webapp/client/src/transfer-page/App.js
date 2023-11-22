@@ -33,7 +33,6 @@ const ButtonWrapper = styled.div`
 `
 const CurrenciesWrapper = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: column;
   justify-content: center;
   heigth: 600px;
@@ -54,19 +53,20 @@ const CurrencyHeader = styled.div`
   width: 100%;
   font-size: 20px;
   text-align: left;
-  padding-left: 50px;
 `
 
 const IndexWrapper = styled.div`
-  background-color: #ECFBE0;
-  margin-top: -10px;
-  margin-left: -10px;
+
 `
 
 const App = () => {
 const [usersForTransfer, setUsersForTransfer] = useState([])
 const [currentUser, setCurrentUser] = useState()
 const [currencies, setCurrencies] = useState()
+
+document.body.style.backgroundColor="#ECFBE0";
+document.body.style.margin=0;
+document.body.style.scroll
 
   useEffect(() => {
     setCurrentUserInfo()
@@ -104,7 +104,7 @@ const [currencies, setCurrencies] = useState()
     <IndexWrapper>
       <CurrenciesWrapper>
         <CurrencyHeader>Курсы валют</CurrencyHeader>
-        {currencies && currencies.map(currency=> <Currency><h3>{currency.code} - {currency.rate}руб.</h3></Currency>)}
+        {currencies && currencies.map(currency=> <Currency key={currency}><h3>{currency.code} - {currency.rate}руб.</h3></Currency>)}
       </CurrenciesWrapper>
       <MainWrapper>
         <MainUser>

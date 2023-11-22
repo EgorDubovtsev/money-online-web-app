@@ -36,7 +36,7 @@ public class CurrencyService {
     @Transactional
     @Retryable(maxAttemptsExpression = "${retry.maxAttempts}", backoff = @Backoff(delayExpression = "${retry.delay}"))
     public BigDecimal convert(String currencyCodeFrom, String currencyCodeTo, String amount){
-        CurrencyConvertDto request = new CurrencyConvertDto(amount, currencyCodeFrom, currencyCodeTo);
+        CurrencyConvertDto request = new CurrencyConvertDto(Double.valueOf(amount), currencyCodeFrom, currencyCodeTo);
 
         String convertedAmount = sendRequestToConvert(request);
         return new BigDecimal(convertedAmount);

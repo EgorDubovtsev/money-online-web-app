@@ -39,7 +39,7 @@ public class SimpleTransactionService implements TransactionService {
         }
         BigDecimal amount = transaction.getAmount();
         if (!clientSrc.getCurrency().equals(clientDest.getCurrency())) {
-            amount = currencyService.convert(transaction.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
+            amount = currencyService.convert(clientSrc.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
         }
 
         if (clientSrc.getBalance().compareTo(amount) < 0) {
@@ -64,11 +64,12 @@ public class SimpleTransactionService implements TransactionService {
         if (isTransactionValid(transaction)) {
             log.info("Транзакция доступна к выполению. {}", transaction);
             BigDecimal amount = transaction.getAmount();
+            BigDecimal transferredAmount = amount;
             if (!clientSrc.getCurrency().equals(clientDest.getCurrency())) {
-                amount = currencyService.convert(transaction.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
+                transferredAmount = currencyService.convert(transaction.getCurrency(), clientDest.getCurrency(), transaction.getAmount().toPlainString());
             }
             clientSrc.setBalance(clientSrc.getBalance().subtract(amount));
-            clientDest.setBalance(clientDest.getBalance().add(amount));
+            clientDest.setBalance(clientDest.getBalance().add(transferredAmount));
 
             transactionEntity.setStatus(Status.FINISHED);
 
@@ -79,6 +80,10 @@ public class SimpleTransactionService implements TransactionService {
         }
         entityManager.persist(transactionEntity);
         unlockAccounts(clientSrc, clientDest);
+
+        if (Status.DECLINED.equals(transactionEntity.getStatus())){
+            throw new IllegalArgumentException("Транзакция отклонена.");
+        }
 
         return transactionEntity.getId();
     }

@@ -157,7 +157,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
                       onFocus={()=>setTransferAmount("")}
                       margin="dense"
                       id="amount"
-                      label="Сумма в рублях"
+                      label="Сумма перевода в валюте счета:"
                       type="text"
                       fullWidth
                       variant="standard"

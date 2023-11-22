@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 @Setter
 public class CurrencyConvertDto {
     @JsonProperty
-    private String amount;
+    private Double amount;
     @JsonProperty
     private String currencyCodeFrom;
     @JsonProperty
-    private String currencyTo;
+    private String currencyCodeTo;
 }
