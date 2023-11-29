@@ -12,7 +12,7 @@ import { createTransfer } from "../utils/utils";
 import { Alert, CircularProgress } from "@mui/material";
 import { SUCCESS_CODE } from "../utils/consts";
 
-let backgroundColor= '#348DE5'
+const backgroundColor= '#348DE5'
 const hoverColor =  '#1976D2'
 const defaultImage = './img/images.png'
 
@@ -50,6 +50,14 @@ const Name = styled.div`{
   margin-bottom: 5px;
 }`
 
+const AccountNumber = styled.div`{
+  display: block;
+  text-align: center;
+  width: 100%;
+  text-align:center;
+  margin-bottom: 5px;
+}`
+
 const ProfilePicture = styled.img`
   border-radius: 10px;
   height: 40px;
@@ -65,10 +73,10 @@ const Transition = React.forwardRef(function Transition(props,ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserBalance}) => {
+export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserBalance, handleClose, transferAmount, amountChangeHandler,
+                                 setTransferAmount}) => {
   const [balance, setBalance] = React.useState(0);
   const [currency, setCurrency] = React.useState('RUB');
-  const [transferAmount, setTransferAmount] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
   const [transferError, setTransferError] = React.useState(null);
   const [isSubmitting, setSubmitting] = React.useState(false);
@@ -108,19 +116,12 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
     
   } 
 
-  const amountChangeHandler = (e) => {
-    setTransferAmount(e.target.value.replace(/\D/,''));
-  } 
 
   const handleTransfer = () => {
     setSubmitting(true)
     createTransition(user.username, transferAmount);
   };
 
-  const handleClose = () => {
-    setTransferAmount(0)
-    setIsOpen(false);
-  };
 
   if (!user) {
     return <div>{'Ошибка'}</div>;
@@ -128,7 +129,7 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
 
     return(
       <>
-        <BalanceWrapper onClick={handleClickOpen}>
+        <BalanceWrapper onClick={()=>handleClickOpen()}>
           <ProfilePictureWrapper>
             <div>
               <ProfilePicture  src={user.image == undefined ? defaultImage : user.image} alt='Profile'/>
@@ -136,6 +137,8 @@ export const UserDataBlock = ({user, isPersonal, currentUser, updateCurrentUserB
           </ProfilePictureWrapper>
           <UserWrapper>
             <Name>{user.name}</Name>
+            
+            {isPersonal && <AccountNumber>Номер счета: {user.accountNumber}</AccountNumber>}  
             {isPersonal && <Balance balance={balance} currency={currency} />}                
           </UserWrapper> 
         </BalanceWrapper>

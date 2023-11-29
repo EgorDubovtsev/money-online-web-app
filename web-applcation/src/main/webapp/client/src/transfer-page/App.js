@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Typography from '@mui/material/Typography';
 import { UserDataBlock } from './UserDataBlock';
 import styled from "styled-components";
 import CircularProgress from '@mui/material/CircularProgress';
 import { getCurrencies, getCurrentUserFullInfo, getUsersAvailableForTransfer, logout } from "../utils/utils";
 import { Button } from "@mui/material";
+import { PaymentBlock } from "./component/PaymentBlock";
 
 const MainWrapper = styled.div`
   display: flex;
@@ -13,12 +13,7 @@ const MainWrapper = styled.div`
   background-color: #ECFBE0;
   height: 70vh;
 `
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  justify-content: right;
-`
+
 const MainUser = styled.div`
   margin-top: 30px;
   display: flex;
@@ -108,13 +103,9 @@ document.body.style.scroll
       </CurrenciesWrapper>
       <MainWrapper>
         <MainUser>
-          {currentUser != undefined && <UserDataBlock user={currentUser} isPersonal={true} updateCurrentUserBalance={setCurrentUserInfo}/>}
+          {currentUser != undefined && <UserDataBlock isOpen={false}  user={currentUser} isPersonal={true} updateCurrentUserBalance={setCurrentUserInfo}/>}
         </MainUser>
-        <Column>
-        <Typography variant="h5" component="div">Выберте пользователя для перевода</Typography>
-
-          {usersForTransfer.length === 0 ? <CircularProgress /> : usersForTransfer.map(user => <UserDataBlock user={user} key={user.id} isPersonal={false} currentUser={currentUser} updateCurrentUserBalance={setCurrentUserInfo}/>)}
-        </Column>
+        <PaymentBlock usersForTransfer={usersForTransfer} currentUser={currentUser}  setCurrentUserInfo={setCurrentUserInfo} user={currentUser}/>
        </MainWrapper>
        <ButtonWrapper>
          <Button variant="outlined" onClick={logoutHandler}>Выход</Button>
