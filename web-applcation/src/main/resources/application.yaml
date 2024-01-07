@@ -1,4 +1,11 @@
 spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: transferGroup
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   profiles:
     active: prod
   h2:
@@ -22,6 +29,9 @@ user:
 server:
   port: 8080
 
+kafkaTopics:
+  transactionHistory: transaction_hist
+
 services:
   currencyService:
     host: http://localhost:8090
@@ -40,3 +50,10 @@ services:
 retry:
   maxAttempts: 4
   delay: 1000
+
+service:
+  mock: false
+
+logging:
+  level:
+    root: INFO

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import static com.web.app.consts.Const.INITIAL_BALANCE;
 
-@Profile("local")
+@Profile({"local","test"})
 @Service
 @Slf4j
 public class LocalUserRestService implements UserRestService {

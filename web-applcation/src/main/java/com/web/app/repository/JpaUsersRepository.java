@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface JpaUsersRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByUsername(String username);
+    void removeUserByUsername(String username);
+    void removeUserById(Long username);
 }

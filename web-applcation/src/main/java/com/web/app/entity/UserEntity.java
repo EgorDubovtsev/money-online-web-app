@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Getter
@@ -25,6 +26,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @JsonProperty
+    @Column(unique = true)
     private String username;
     @JsonProperty
     private String name;
@@ -58,5 +60,25 @@ public class UserEntity {
 
     public void unlock() {
         reentrantLock.unlock();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getUsername(),
+                that.getUsername()) && Objects.equals(getName(),
+                that.getName()) && Objects.equals(getBirthdate(), that.getBirthdate())
+                && Objects.equals(getPassword(), that.getPassword())
+                && Objects.equals(getBalance(), that.getBalance())
+                && Objects.equals(getAccountNumber(), that.getAccountNumber())
+                && getCurrency() == that.getCurrency()
+                && (Objects.equals(getRoles(), that.getRoles()) || getRoles().containsAll(that.getRoles()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUsername(), getName(), getBirthdate(), getPassword(), getBalance(), getAccountNumber(), getCurrency(), getRoles());
     }
 }

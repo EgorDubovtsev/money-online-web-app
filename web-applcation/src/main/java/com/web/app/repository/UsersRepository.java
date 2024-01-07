@@ -16,4 +16,8 @@ public interface UsersRepository {
     void saveUserChanges(UserEntity user);
 
     UserEntity findById(Long id);
+
+    void removeUserById(Long id);
+
+    void removeUserByUserName(String username);
 }

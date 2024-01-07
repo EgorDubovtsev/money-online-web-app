@@ -2,6 +2,7 @@ package com.transfer.online.service;
 
 import com.transfer.online.cosnts.Status;
 import com.transfer.online.dto.TransactionDto;
+import com.transfer.online.dto.TransactionHistoryDto;
 import com.transfer.online.entity.ClientEntity;
 import com.transfer.online.entity.Transaction;
 import com.transfer.online.repository.ClientRepository;
@@ -25,6 +26,7 @@ public class SimpleTransactionService implements TransactionService {
     private final ClientRepository clientRepository;
     private final EntityManager entityManager;
     private final CurrencyService currencyService;
+    private final AuditService auditService;
 
     @Override
     public boolean isTransactionValid(TransactionDto transaction) {
@@ -53,7 +55,6 @@ public class SimpleTransactionService implements TransactionService {
     @Transactional
     public Long executeTransaction(TransactionDto transaction) {
         log.debug("Обработка запроса на выполение транзацкии {}", transaction);
-
         ClientEntity clientSrc = clientRepository.findByAccount(transaction.getAccountSource());
         ClientEntity clientDest = clientRepository.findByAccount(transaction.getAccountDestination());
         Transaction transactionEntity = new Transaction(transaction);
@@ -78,7 +79,10 @@ public class SimpleTransactionService implements TransactionService {
             transactionEntity.setStatus(Status.DECLINED);
 
         }
+
+        auditService.sendTransactionToKafka(new TransactionHistoryDto(transactionEntity));
         entityManager.persist(transactionEntity);
+
         unlockAccounts(clientSrc, clientDest);
 
         if (Status.DECLINED.equals(transactionEntity.getStatus())){

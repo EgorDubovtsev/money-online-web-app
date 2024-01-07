@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@Profile("prod")
+@Profile("!local")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class JpaUsersRepositoryAdapter implements UsersRepository {
     private final JpaUsersRepository usersRepository;
@@ -38,5 +38,15 @@ public class JpaUsersRepositoryAdapter implements UsersRepository {
     @Override
     public UserEntity findById(Long id) {
         return usersRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void removeUserById(Long id) {
+        usersRepository.removeUserById(id);
+    }
+
+    @Override
+    public void removeUserByUserName(String username) {
+        usersRepository.removeUserByUsername(username);
     }
 }

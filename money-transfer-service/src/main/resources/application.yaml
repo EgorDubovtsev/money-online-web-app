@@ -5,6 +5,13 @@ server:
       enabled: false
 
 spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      client-id: mts1
+      acks: all
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   h2:
     console.enabled: true
   datasource:

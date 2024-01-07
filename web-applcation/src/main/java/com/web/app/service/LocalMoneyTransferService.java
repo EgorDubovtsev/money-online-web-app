@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
-@Profile("local")
+@Profile("!prod")
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class LocalMoneyTransferService implements TransactionService {
     private final UsersService usersService;

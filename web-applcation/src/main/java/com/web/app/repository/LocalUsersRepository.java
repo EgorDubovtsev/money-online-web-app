@@ -113,4 +113,14 @@ public class LocalUsersRepository implements UsersRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public void removeUserById(Long id) {
+        users.remove(findById(id));
+    }
+
+    @Override
+    public void removeUserByUserName(String username) {
+        users.remove(getUser(username));
+    }
 }
