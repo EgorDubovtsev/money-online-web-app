@@ -1,4 +1,4 @@
-package com.web.app.config;
+package com.web.app;
 
 import com.moneyonline.commons.entity.Currency;
 import com.web.app.entity.UserEntity;

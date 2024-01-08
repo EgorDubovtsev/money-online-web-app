@@ -1,59 +1,61 @@
 spring:
+  application:
+    name: web-app
   kafka:
     consumer:
-      bootstrap-servers: localhost:29092
-      group-id: transferGroup
-      auto-offset-reset: earliest
+      bootstrap-servers: ${KAFKA_CONSUMER_BOOTSTRAP_SERVICE:localhost:29092}
+      group-id: ${KAFKA_CONSUMER_GROUP_ID:transferGroup}
+      auto-offset-reset: ${KAFKA_CONSUMER_AUTO_OFFSET_RESET:earliest}
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   profiles:
-    active: prod
+    active: ${WEB_SERVICE_PROFILE:prod}
   h2:
     console.enabled: true
   datasource:
-    url: jdbc:h2:mem:monline
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: ${DATASOURCE_URL:jdbc:h2:mem:monline}
+    username: ${DATASOURCE_USERNAME:sa}
+    password: ${DATASOURCE_PASS:password}
+    driverClassName: ${DATASOURCE_DRIVER:org.h2.Driver}
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
-    hibernate.ddl-auto: update
-    show-sql: true
+    spring.jpa.database-platform: ${JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    hibernate.ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: ${JPA_SHOW_SQL:true}
     properties:
       hibernate.format_sql: true
 
 user:
   file:
-    path: src/main/resources/users/user-data.text
+    path: ${USER_FILE_PATH:src/main/resources/users/user-data.text}
 
 server:
-  port: 8080
+  port: ${WEB_APP_PORT:8080}
 
 kafkaTopics:
-  transactionHistory: transaction_hist
+  transactionHistory: ${KAFKA_TOPICS_TRANSACTION_HISTORY:transaction_hist}
 
 services:
   currencyService:
-    host: http://localhost:8090
-    getCurrenciesPath: /currency/available
-    convertPath: /rate/convert
-    getCourcePath: /rate/${currencyCode}
+    host: ${CURRENCY_SERVICE_HOST:http://localhost:8090}
+    getCurrenciesPath: ${CURRENCY_SERVICE_GET_CURRENCY_PATH:/currency/available}
+    convertPath: ${CURRENCY_SERVICE_CONVERT_PATH:/rate/convert}
+    getCourcePath: ${CURRENCY_SERVICE_GET_COURCE_PATH:/rate/${currencyCode}}
   transactionService:
-    host: http://localhost:8081
-    createUserPath: /ts/create
-    getClientDataPath: /ts/{clientId}/data
-    transferPath: /ts/transfer
+    host: ${TRANSACTION_SERVICE_HOST:http://localhost:8081}
+    createUserPath: ${TRANSACTION_SERVICE_CREATE_USER_PATH:/ts/create}
+    getClientDataPath: ${TRANSACTION_SERVICE_GET_CLIENT_DATA_PATH:/ts/{clientId}/data}
+    transferPath: ${TRANSACTION_SERVICE_TRANSFER_PATH:/ts/transfer}
     auth:
-      username: webservice
-      password: wbsvc123
+      username: ${TRANSACTION_SERVICE_AUTH_USERNAME:webservice}
+      password: ${TRANSACTION_SERVICE_AUTH_PASS:wbsvc123}
 
 retry:
-  maxAttempts: 4
-  delay: 1000
+  maxAttempts: ${RETRY_MAX_ATTEMPTS:4}
+  delay: ${RETRY_DELAY:1000}
 
 service:
   mock: false
 
 logging:
   level:
-    root: INFO
+    root: ${LOGGING_LEVEL_ROOT:INFO}

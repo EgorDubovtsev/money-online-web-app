@@ -35,7 +35,7 @@ public class LocalUsersRepository implements UsersRepository {
 
         if (!usersFile.exists()) {
             log.error("Некорректный путь к файлу с пользователями. Путь = {}", userFilePath);
-            throw new IllegalArgumentException("Некорректный путь к файлу с пользователями.");
+            return new ArrayList<>();
         }
 
         List<UserEntity> users = new ArrayList<>();
