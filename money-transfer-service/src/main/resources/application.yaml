@@ -7,24 +7,24 @@ server:
 spring:
   kafka:
     producer:
-      bootstrap-servers: localhost:29092
-      client-id: mts1
-      acks: all
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVICE:localhost:29092}
+      client-id: ${KAFKA_PRODUCER_CLIENT_ID:mts1}
+      acks: ${KAFKA_PRODUCER_ACKS:all}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   h2:
-    console.enabled: true
+    console.enabled: ${H2_CONSOLE_ENABLED:true}
   datasource:
-    url: jdbc:h2:mem:monline
-    username: transfer
-    password: password
-    driverClassName: org.h2.Driver
+    url: ${DATASOURCE_URL:jdbc:h2:mem:monline}
+    username: ${DATASOURCE_USERNAME:transfer}
+    password: ${DATASOURCE_PASSWORD:password}
+    driverClassName: ${DATASOURCE_DRIVER:org.h2.Driver}
   jpa:
     spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 
 services:
   currencyService:
-    host: http://localhost:8090
-    getCurreniesPath: /currency/available
-    convertPath: /rate/convert
-    getCourcePath: /rate/${currencyCode}
+    host: ${SERVICES_CURRENCY_URL:http://localhost:8090}
+    getCurreniesPath: ${SERVICES_CURRENCY_GET_CURRENCY_PATH:/currency/available}
+    convertPath: ${SERVICES_CURRENCY_CONVERT_PATH:/rate/convert}
+    getCourcePath: ${SERVICES_CURRENCY_GET_COURCE_PATH:'/rate/${currencyCode}'}

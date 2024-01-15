@@ -1,4 +1,5 @@
 version: '2'
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -21,3 +22,33 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  web-app:
+    links:
+      - kafka
+      - transfer-app
+      - currency-app
+    environment:
+      WEB_SERVICE_PROFILE: prod
+      CURRENCY_SERVICE_URL: http://currency-app:8090
+      TRANSACTION_SERVICE_HOST: http://transfer-app:8081
+      KAFKA_CONSUMER_BOOTSTRAP_SERVICE: kafka:9092
+    build: .\web-applcation
+    ports:
+      - "8080:8080"
+
+  transfer-app:
+    links:
+      - kafka
+      - currency-app
+    build: .\money-transfer-service
+    environment:
+      SERVICES_CURRENCY_URL: http://currency-app:8090
+      KAFKA_PRODUCER_BOOTSTRAP_SERVICE: kafka:9092
+    ports:
+      - "8081:8081"
+
+  currency-app:
+    build: .\currency-service
+    ports:
+      - "8090:8090"

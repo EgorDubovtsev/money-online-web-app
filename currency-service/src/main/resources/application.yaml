@@ -2,19 +2,19 @@ server:
   port: 8090
 
 retry:
-  maxAttempts: 4
-  delay: 1000
+  maxAttempts:  ${RETRY_MAX_ATTEMPTS:4}
+  delay:  ${RETRY_DELAY:1000}
 
 spring:
   h2:
-    console.enabled: true
+    console.enabled:  ${H2_CONSOLE_ENABLED:true}
   datasource:
-    url: jdbc:h2:mem:monline
-    username: transfer
-    password: password
-    driverClassName: org.h2.Driver
+    url:  ${DATASOURCE_URL:jdbc:h2:mem:monline}
+    username: ${DATASOURCE_USERNAME:transfer}
+    password: ${DATASOURCE_PASSWORD:password}
+    driverClassName: ${DATASOURCE_DRIVER:org.h2.Driver}
 db:
-  schema: currency_service
+  schema: ${DATASOURCE_SCHEMA:currency_service}
 
 currencies:
-  main: RUB
+  main: ${CURRENCIES_MAIN:RUB}

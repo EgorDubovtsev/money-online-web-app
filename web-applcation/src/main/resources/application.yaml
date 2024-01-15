@@ -36,7 +36,7 @@ kafkaTopics:
 
 services:
   currencyService:
-    host: ${CURRENCY_SERVICE_HOST:http://localhost:8090}
+    host: ${CURRENCY_SERVICE_URL:http://localhost:8090}
     getCurrenciesPath: ${CURRENCY_SERVICE_GET_CURRENCY_PATH:/currency/available}
     convertPath: ${CURRENCY_SERVICE_CONVERT_PATH:/rate/convert}
     getCourcePath: ${CURRENCY_SERVICE_GET_COURCE_PATH:/rate/${currencyCode}}
