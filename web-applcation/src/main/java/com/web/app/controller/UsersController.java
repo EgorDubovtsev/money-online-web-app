@@ -3,7 +3,7 @@ package com.web.app.controller;
 import com.google.gson.Gson;
 import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.entity.UserEntity;
-import com.web.app.service.UsersService;
+import com.web.app.service.impl.UsersServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping(value = "/users")
 public class UsersController {
     private final Gson MAPPER = new Gson();
-    private final UsersService usersService;
+    private final UsersServiceImpl usersService;
 
     @Profiling
     @GetMapping("/transfer/available")

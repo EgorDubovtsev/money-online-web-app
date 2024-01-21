@@ -1,6 +1,6 @@
 package com.transfer.online.config;
 
-import com.transfer.online.service.AuthorizationService;
+import com.transfer.online.service.impl.AuthorizationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

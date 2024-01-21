@@ -2,14 +2,9 @@ package com.web.app;
 
 import com.moneyonline.commons.entity.Currency;
 import com.web.app.entity.UserEntity;
-import com.web.app.repository.UsersRepository;
 import com.web.app.service.CurrencyService;
-import com.web.app.service.OnlineUserRestService;
-import com.web.app.service.SimpleCurrencyService;
 import com.web.app.service.UserRestService;
 import com.web.app.service.dto.TransferClientDto;
-import org.mockito.Mock;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;

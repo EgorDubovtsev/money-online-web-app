@@ -5,6 +5,8 @@ server:
       enabled: false
 
 spring:
+  application:
+    name: transfer-service
   kafka:
     producer:
       bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVICE:localhost:29092}
@@ -28,3 +30,16 @@ services:
     getCurreniesPath: ${SERVICES_CURRENCY_GET_CURRENCY_PATH:/currency/available}
     convertPath: ${SERVICES_CURRENCY_CONVERT_PATH:/rate/convert}
     getCourcePath: ${SERVICES_CURRENCY_GET_COURCE_PATH:'/rate/${currencyCode}'}
+
+managed:
+  endpoints:
+    enabled-by-default: ${MANAGED_ENDPOINTS_ENABLED_BY_DEFAULT:true}
+    info:
+      enabled: ${MANAGED_ENDPOINTS_INFO_ENABLED:true}
+
+
+info:
+  application:
+    name: transfer-service
+    description: Transfer service of Bank Online
+    version: 1.0

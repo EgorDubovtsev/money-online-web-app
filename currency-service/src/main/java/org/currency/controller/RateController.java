@@ -4,7 +4,7 @@ import com.moneyonline.commons.annotation.Profiling;
 import lombok.RequiredArgsConstructor;
 import org.currency.controller.request.ConvertRequest;
 import org.currency.mapper.CurrencyMapper;
-import org.currency.service.CurrencyService;
+import org.currency.service.CurrencyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import javax.websocket.server.PathParam;
 @RequestMapping("/rate")
 public class RateController {
     private final CurrencyMapper currencyMapper;
-    private final CurrencyService currencyService;
+    private final CurrencyServiceImpl currencyService;
 
     /**
      * @return актуальный курс валюты

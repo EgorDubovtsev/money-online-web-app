@@ -15,6 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/currency/**").permitAll()
                 .antMatchers("/rate/**").permitAll()
+                .antMatchers("/actuator/**").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()

@@ -6,6 +6,8 @@ retry:
   delay:  ${RETRY_DELAY:1000}
 
 spring:
+  application:
+    name: currency-service
   h2:
     console.enabled:  ${H2_CONSOLE_ENABLED:true}
   datasource:
@@ -18,3 +20,16 @@ db:
 
 currencies:
   main: ${CURRENCIES_MAIN:RUB}
+
+managed:
+  endpoints:
+    enabled-by-default: ${MANAGED_ENDPOINTS_ENABLED_BY_DEFAULT:true}
+    info:
+      enabled: ${MANAGED_ENDPOINTS_INFO_ENABLED:true}
+
+
+info:
+  application:
+    name: currency-service
+    description: Currency service of Bank Online
+    version: 1.0

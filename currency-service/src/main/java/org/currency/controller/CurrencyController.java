@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.currency.controller.response.CurrenciesResponse;
 import org.currency.controller.response.dto.CurrencyDto;
 import org.currency.mapper.CurrencyMapper;
-import org.currency.service.CurrencyService;
+import org.currency.service.CurrencyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 public class CurrencyController {
     private final CurrencyMapper currencyMapper;
-    private final CurrencyService currencyService;
+    private final CurrencyServiceImpl currencyService;
 
     /**
      * @return Список валют с которыми работает сервис

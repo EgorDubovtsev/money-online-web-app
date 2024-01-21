@@ -3,7 +3,7 @@ package com.web.app.controller;
 
 import com.moneyonline.commons.annotation.Profiling;
 import com.web.app.entity.UserEntity;
-import com.web.app.service.UsersService;
+import com.web.app.service.impl.UsersServiceImpl;
 import com.web.app.service.entity.Errors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor(onConstructor = @_(@Autowired))
 @Controller
 public class IndexController {
-    private final UsersService usersService;
+    private final UsersServiceImpl usersService;
 
     @GetMapping("/")
     public String index() {

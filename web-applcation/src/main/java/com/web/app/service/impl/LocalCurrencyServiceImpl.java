@@ -1,0 +1,21 @@
+package com.web.app.service.impl;
+
+import com.web.app.service.CurrencyService;
+import com.web.app.service.dto.Currency;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.List;
+
+@Service
+@Profile("local")
+public class LocalCurrencyServiceImpl implements CurrencyService {
+    @Override
+    public List<Currency> getCurrencies() {
+        return Arrays.asList(
+                new Currency("RUB", "1.0"),
+                new Currency("USD", "83.3"),
+                new Currency("EUR", "90.1"));
+    }
+}

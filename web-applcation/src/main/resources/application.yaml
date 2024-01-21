@@ -59,3 +59,16 @@ service:
 logging:
   level:
     root: ${LOGGING_LEVEL_ROOT:INFO}
+
+managed:
+  endpoints:
+    enabled-by-default: ${MANAGED_ENDPOINTS_ENABLED_BY_DEFAULT:true}
+    info:
+      enabled: ${MANAGED_ENDPOINTS_INFO_ENABLED:true}
+
+
+info:
+  application:
+    name: web-app
+    description: Web application of Bank Online
+    version: 1.0
