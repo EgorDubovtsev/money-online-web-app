@@ -20,6 +20,7 @@ db:
 
 currencies:
   main: ${CURRENCIES_MAIN:RUB}
+  updateCron: 0/15 * * ? * *
 
 managed:
   endpoints:

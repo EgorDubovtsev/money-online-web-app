@@ -17,7 +17,7 @@ public class CurrencySchedulerImpl implements CurrencyScheduler {
     private final CurrencyDao currencyDao;
 
     @Override
-    @Scheduled(cron = "0/15 * * ? * *")
+    @Scheduled(cron = "${currencies.updateCron}")
     public void updateRates() {
         List<Currency> currencies = currencyDao.getEnabledCurrencies();
 
