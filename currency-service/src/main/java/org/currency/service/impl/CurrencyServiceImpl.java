@@ -1,8 +1,9 @@
-package org.currency.service;
+package org.currency.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.currency.dao.CurrencyDao;
 import org.currency.entity.Currency;
+import org.currency.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.currency.controller.response.CurrenciesResponse;
 import org.currency.controller.response.dto.CurrencyDto;
 import org.currency.mapper.CurrencyMapper;
-import org.currency.service.CurrencyServiceImpl;
+import org.currency.service.impl.CurrencyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

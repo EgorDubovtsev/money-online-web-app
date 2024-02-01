@@ -38,4 +38,17 @@ public class CurrencyDao {
 
         jdbcTemplate.update(UPDATE_CURRENCY_RATE, parameters);
     }
+
+    public void updateRate(List<Currency> currencies) {
+        MapSqlParameterSource[] args = new MapSqlParameterSource[currencies.size()];
+        for (int i = 0; i < currencies.size(); i++) {
+
+        }
+        for (int i = 0; i < currencies.size(); i++) {
+            args[i] = new MapSqlParameterSource()
+                    .addValue("code", currencies.get(i).getCode())
+                    .addValue("rate", currencies.get(i).getRate());
+        }
+        jdbcTemplate.batchUpdate(UPDATE_CURRENCY_RATE, args);
+    }
 }

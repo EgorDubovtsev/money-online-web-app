@@ -4,7 +4,7 @@ import com.moneyonline.commons.annotation.Profiling;
 import lombok.RequiredArgsConstructor;
 import org.currency.controller.request.ConvertRequest;
 import org.currency.mapper.CurrencyMapper;
-import org.currency.service.CurrencyServiceImpl;
+import org.currency.service.impl.CurrencyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
